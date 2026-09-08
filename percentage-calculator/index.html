@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Percentage Calculator — Online, Free</title>
+<meta name="description" content="Free percentage calculator. Find what X% of a number is, what percent one number is of another, or percentage change.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#0d2b2e; --surface:#123539; --line:#26555b; --paper:#e9f2f1; --muted:#7fa2a4; --coral:#ff7a59; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'Space Mono',monospace; font-size:13px; color:var(--coral); margin-bottom:14px; }
+  h1{ font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:600px; background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:12px; }
+  .tabs{ display:flex; gap:4px; margin-bottom:24px; background:var(--ink); padding:4px; border-radius:4px; }
+  .tab{ flex:1; text-align:center; padding:10px 6px; font-size:12.5px; font-weight:500; color:var(--muted); background:transparent; border:none; border-radius:3px; cursor:pointer; }
+  .tab.active{ background:var(--coral); color:var(--ink); }
+  .panel{ padding:8px 24px 28px; display:none; }
+  .panel.active{ display:block; }
+  .equation-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:15px; margin-bottom:20px; }
+  .equation-row input[type="number"]{ width:100px; background:var(--ink); border:1px solid var(--line); border-radius:3px; padding:12px 14px; font-family:'Space Mono',monospace; font-size:16px; color:var(--paper); outline:none; }
+  .result-box{ margin-top:8px; background:var(--ink); border:1px solid var(--line); border-radius:3px; padding:24px; text-align:center; }
+  .result-value{ font-family:'Space Mono',monospace; font-weight:700; font-size:32px; color:var(--coral); }
+  .result-sub{ font-size:13px; color:var(--muted); margin-top:8px; }
+  footer{ margin-top:48px; color:#3d6266; font-size:12px; font-family:'Space Mono',monospace; text-align:center; }
+  footer a{ color:#3d6266; }
+  .content{ width:100%; max-width:620px; margin-top:64px; padding-top:48px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:22px; margin:40px 0 14px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#b9d0cf; font-size:15px; line-height:1.75; margin:0 0 14px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / math</div>
+  <h1>Percentage Calculator</h1>
+  <p class="sub">Three common percentage calculations in one place — results update live.</p>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" data-panel="percentOf">X% of a number</button>
+      <button class="tab" data-panel="whatPercent">What percent is X</button>
+      <button class="tab" data-panel="change">% Change</button>
+    </div>
+    <div class="panel active" id="panel-percentOf">
+      <div class="equation-row"><input type="number" id="p1_percent" value="20"> % of <input type="number" id="p1_number" value="150"></div>
+      <div class="result-box"><div class="result-value" id="p1_result">—</div><div class="result-sub" id="p1_sub"></div></div>
+    </div>
+    <div class="panel" id="panel-whatPercent">
+      <div class="equation-row"><input type="number" id="p2_part" value="30"> is what % of <input type="number" id="p2_whole" value="150"></div>
+      <div class="result-box"><div class="result-value" id="p2_result">—</div><div class="result-sub" id="p2_sub"></div></div>
+    </div>
+    <div class="panel" id="panel-change">
+      <div class="equation-row">from <input type="number" id="p3_from" value="150"> to <input type="number" id="p3_to" value="180"></div>
+      <div class="result-box"><div class="result-value" id="p3_result">—</div><div class="result-sub" id="p3_sub"></div></div>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>Three types of percentage math</h2>
+    <p>"X% of a number" answers questions like "what is 20% of $150". "What percent" flips it around — "30 is what percent of 150". "Percentage change" shows how much something increased or decreased, e.g. a price change or year-over-year growth.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  function parseNum(str){ const v=parseFloat(str.replace(',','.')); return isNaN(v)?null:v; }
+  const tabs=document.querySelectorAll('.tab'), panels=document.querySelectorAll('.panel');
+  tabs.forEach(tab=>tab.addEventListener('click',()=>{ tabs.forEach(t=>t.classList.remove('active')); panels.forEach(p=>p.classList.remove('active')); tab.classList.add('active'); document.getElementById('panel-'+tab.dataset.panel).classList.add('active'); }));
+
+  const p1_percent=document.getElementById('p1_percent'), p1_number=document.getElementById('p1_number');
+  function updateP1(){ const pct=parseNum(p1_percent.value), num=parseNum(p1_number.value);
+    if(pct===null||num===null){ document.getElementById('p1_result').textContent='—'; document.getElementById('p1_sub').textContent=''; return; }
+    const result=(pct/100)*num;
+    document.getElementById('p1_result').textContent=result.toLocaleString('en-US',{maximumFractionDigits:4});
+    document.getElementById('p1_sub').textContent=`${pct}% of ${num} is ${result.toLocaleString('en-US',{maximumFractionDigits:4})}`;
+  }
+  p1_percent.addEventListener('input',updateP1); p1_number.addEventListener('input',updateP1);
+
+  const p2_part=document.getElementById('p2_part'), p2_whole=document.getElementById('p2_whole');
+  function updateP2(){ const part=parseNum(p2_part.value), whole=parseNum(p2_whole.value);
+    if(part===null||whole===null||whole===0){ document.getElementById('p2_result').textContent='—'; document.getElementById('p2_sub').textContent=''; return; }
+    const result=(part/whole)*100;
+    document.getElementById('p2_result').textContent=result.toLocaleString('en-US',{maximumFractionDigits:2})+'%';
+    document.getElementById('p2_sub').textContent=`${part} is ${result.toLocaleString('en-US',{maximumFractionDigits:2})}% of ${whole}`;
+  }
+  p2_part.addEventListener('input',updateP2); p2_whole.addEventListener('input',updateP2);
+
+  const p3_from=document.getElementById('p3_from'), p3_to=document.getElementById('p3_to');
+  function updateP3(){ const from=parseNum(p3_from.value), to=parseNum(p3_to.value);
+    if(from===null||to===null||from===0){ document.getElementById('p3_result').textContent='—'; document.getElementById('p3_sub').textContent=''; return; }
+    const change=((to-from)/Math.abs(from))*100; const sign=change>0?'+':'';
+    document.getElementById('p3_result').textContent=sign+change.toLocaleString('en-US',{maximumFractionDigits:2})+'%';
+    document.getElementById('p3_sub').textContent=change>=0?'that\'s an increase':'that\'s a decrease';
+  }
+  p3_from.addEventListener('input',updateP3); p3_to.addEventListener('input',updateP3);
+  updateP1(); updateP2(); updateP3();
+</script>
+</body>
+</html>

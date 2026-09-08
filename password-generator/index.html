@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Password Generator — Create Strong, Secure Passwords</title>
+<meta name="description" content="Free password generator. Create strong, random passwords with a cryptographically secure generator — no signup required, works entirely in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#12161d; --surface:#1a1f28; --surface-raised:#212733; --line:#2a3140; --paper:#e9e7df; --muted:#8b93a1; --brass:#c9a15a; --brass-dim:#8a713e; --ok:#6f9b74; --warn:#c98a4b; --bad:#b0524f; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:radial-gradient(ellipse 900px 500px at 50% -10%, #1b2230 0%, var(--ink) 60%); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:56px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.04em; color:var(--brass); margin-bottom:14px; }
+  h1{ font-family:'Fraunces',serif; font-weight:500; font-size:clamp(32px,5vw,46px); line-height:1.15; text-align:center; max-width:640px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:480px; font-size:15px; line-height:1.6; margin:0 0 44px; }
+  .card{ width:100%; max-width:580px; background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:36px; position:relative; }
+  .card::before{ content:""; position:absolute; top:-1px; left:24px; right:24px; height:1px; background:linear-gradient(90deg,transparent,var(--brass-dim),transparent); }
+  .output-row{ display:flex; align-items:center; gap:10px; background:var(--ink); border:1px solid var(--line); border-radius:3px; padding:18px; margin-bottom:22px; }
+  #output{ flex:1; font-family:'IBM Plex Mono',monospace; font-size:19px; letter-spacing:0.02em; color:var(--paper); background:transparent; border:none; outline:none; min-width:0; overflow-x:auto; white-space:nowrap; }
+  .icon-btn{ background:transparent; border:1px solid var(--line); color:var(--muted); width:38px; height:38px; border-radius:3px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:border-color .15s ease,color .15s ease; }
+  .icon-btn:hover{ border-color:var(--brass); color:var(--brass); }
+  .strength-row{ display:flex; align-items:center; gap:10px; margin-bottom:30px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted); }
+  .strength-bars{ display:flex; gap:4px; flex:1; }
+  .strength-bars span{ height:4px; flex:1; background:var(--line); border-radius:2px; transition:background .2s ease; }
+  .control{ margin-bottom:22px; }
+  .control-label{ display:flex; justify-content:space-between; font-size:13px; color:var(--muted); margin-bottom:10px; }
+  .control-label b{ font-family:'IBM Plex Mono',monospace; color:var(--paper); font-weight:500; }
+  input[type="range"]{ -webkit-appearance:none; width:100%; height:2px; background:var(--line); border-radius:1px; outline:none; }
+  input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--brass); cursor:pointer; border:none; }
+  .toggles{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:30px; }
+  .toggle{ display:flex; align-items:center; gap:10px; padding:12px 14px; background:var(--ink); border:1px solid var(--line); border-radius:3px; cursor:pointer; font-size:14px; user-select:none; transition:border-color .15s ease; }
+  .toggle:hover{ border-color:#3a4356; }
+  .toggle input{ accent-color:var(--brass); width:15px; height:15px; }
+  .generate-btn{ width:100%; background:var(--brass); color:#14181f; border:none; font-family:'Inter',sans-serif; font-weight:600; font-size:15px; padding:15px; border-radius:3px; cursor:pointer; transition:background .15s ease; }
+  .generate-btn:hover{ background:#d8b06a; }
+  .note{ margin-top:22px; font-size:12.5px; color:var(--muted); text-align:center; line-height:1.6; }
+  footer{ margin-top:48px; color:#566072; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#566072; }
+  .content{ width:100%; max-width:620px; margin-top:64px; padding-top:48px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Fraunces',serif; font-weight:500; font-size:22px; margin:40px 0 14px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#bcd4d1; font-size:15px; line-height:1.75; margin:0 0 14px; color:#c1c8d1; }
+  .faq-item{ margin-bottom:20px; }
+  .faq-item h3{ font-family:'Inter',sans-serif; font-weight:600; font-size:15px; margin:0 0 8px; }
+  .faq-item p{ margin:0; font-size:14.5px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / security</div>
+  <h1>Generate a password<br>nobody can guess</h1>
+  <p class="sub">Randomness generated locally in your browser. Your passwords are never sent anywhere or stored.</p>
+
+  <div class="card">
+    <div class="output-row">
+      <input id="output" type="text" readonly value="">
+      <button class="icon-btn" id="copyBtn" title="Copy password"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M4 16V5a1 1 0 0 1 1-1h11"/></svg></button>
+      <button class="icon-btn" id="refreshBtn" title="New password"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M5.5 9a7 7 0 0 1 12-3.5L20 8"/><path d="M18.5 15a7 7 0 0 1-12 3.5L4 16"/></svg></button>
+    </div>
+    <div class="strength-row">
+      <span id="strengthText">Strength: —</span>
+      <div class="strength-bars"><span id="bar1"></span><span id="bar2"></span><span id="bar3"></span><span id="bar4"></span></div>
+    </div>
+    <div class="control">
+      <div class="control-label"><span>Password length</span><b id="lengthVal">16</b></div>
+      <input type="range" id="lengthSlider" min="6" max="48" value="16">
+    </div>
+    <div class="toggles">
+      <label class="toggle"><input type="checkbox" id="upper" checked> Uppercase (A–Z)</label>
+      <label class="toggle"><input type="checkbox" id="lower" checked> Lowercase (a–z)</label>
+      <label class="toggle"><input type="checkbox" id="numbers" checked> Numbers (0–9)</label>
+      <label class="toggle"><input type="checkbox" id="symbols" checked> Symbols (!@#$…)</label>
+    </div>
+    <button class="generate-btn" id="generateBtn">Generate new password</button>
+    <p class="note">Uses the Web Crypto API — a cryptographically secure source of randomness.</p>
+  </div>
+
+  <section class="content">
+    <h2>Why a strong password matters</h2>
+    <p>Most account breaches don't start with a sophisticated hack — they start with a weak password. Password-cracking tools can test billions of combinations per second, so a password like "password123" falls in a fraction of a second. A random password of 16+ characters mixing upper and lowercase letters, numbers, and symbols would take thousands of years to crack with current computing power.</p>
+    <p>The other common mistake is <strong>reusing the same password across sites</strong>. When one service leaks (and leaks happen regularly, even at large companies), attackers immediately try that same password on your email, bank, and social accounts. That's why every account should have its own unique password — a password manager makes this practical by remembering them for you.</p>
+    <h2>How this generator works</h2>
+    <p>This tool uses the <strong>Web Crypto API</strong> — the browser's built-in cryptographically secure randomness engine, the same standard used by banking apps and password managers. Unlike a plain random function, Web Crypto API output is unpredictable even to someone who knows exactly when it was generated.</p>
+    <p>Everything happens locally, in your browser. Your password is never sent to any server — we don't store it, we don't see it.</p>
+    <div class="faq-item"><h3>What length is considered safe?</h3><p>12 characters minimum for everyday accounts, 16+ for important ones like email or banking. Length matters more than complexity, so lean toward 20 characters when a site allows it.</p></div>
+    <div class="faq-item"><h3>Should I save my generated passwords?</h3><p>Yes — but in a password manager, not a plain text file. A password manager stores passwords encrypted and can auto-fill them for you.</p></div>
+    <div class="faq-item"><h3>Does this tool store my passwords on a server?</h3><p>No. Generation happens entirely in your browser (local JavaScript). No password ever leaves your device.</p></div>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const SETS = { upper:'ABCDEFGHJKLMNPQRSTUVWXYZ', lower:'abcdefghijkmnopqrstuvwxyz', numbers:'23456789', symbols:'!@#$%^&*_-+=?' };
+  const output = document.getElementById('output');
+  const lengthSlider = document.getElementById('lengthSlider');
+  const lengthVal = document.getElementById('lengthVal');
+  const upper = document.getElementById('upper'), lower = document.getElementById('lower'), numbers = document.getElementById('numbers'), symbols = document.getElementById('symbols');
+  const generateBtn = document.getElementById('generateBtn'), refreshBtn = document.getElementById('refreshBtn'), copyBtn = document.getElementById('copyBtn');
+  const strengthText = document.getElementById('strengthText');
+  const bars = [document.getElementById('bar1'),document.getElementById('bar2'),document.getElementById('bar3'),document.getElementById('bar4')];
+
+  function secureRandomInt(max){ const arr = new Uint32Array(1); crypto.getRandomValues(arr); return arr[0] % max; }
+
+  function generatePassword(){
+    let pool=''; const active=[];
+    if(upper.checked){ pool+=SETS.upper; active.push(SETS.upper); }
+    if(lower.checked){ pool+=SETS.lower; active.push(SETS.lower); }
+    if(numbers.checked){ pool+=SETS.numbers; active.push(SETS.numbers); }
+    if(symbols.checked){ pool+=SETS.symbols; active.push(SETS.symbols); }
+    if(pool===''){ lower.checked=true; pool=SETS.lower; active.push(SETS.lower); }
+    const length = parseInt(lengthSlider.value,10);
+    let result=[];
+    active.forEach(set => result.push(set[secureRandomInt(set.length)]));
+    while(result.length<length) result.push(pool[secureRandomInt(pool.length)]);
+    for(let i=result.length-1;i>0;i--){ const j=secureRandomInt(i+1); [result[i],result[j]]=[result[j],result[i]]; }
+    output.value = result.slice(0,length).join('');
+    updateStrength(length, active.length);
+  }
+
+  function updateStrength(length, setCount){
+    let score=0;
+    if(length>=8) score++;
+    if(length>=12) score++;
+    if(length>=16 && setCount>=3) score++;
+    if(length>=20 && setCount>=4) score++;
+    const labels=['Weak','Fair','Good','Very strong'];
+    const colors=['var(--bad)','var(--warn)','var(--ok)','var(--brass)'];
+    const idx=Math.max(0,Math.min(score,4)-1);
+    strengthText.textContent = 'Strength: ' + (score===0?'Weak':labels[idx]);
+    bars.forEach((bar,i)=>{ bar.style.background = i<=(score-1) ? colors[idx] : 'var(--line)'; });
+  }
+
+  lengthSlider.addEventListener('input',()=>{ lengthVal.textContent=lengthSlider.value; generatePassword(); });
+  [upper,lower,numbers,symbols].forEach(el=>el.addEventListener('change',generatePassword));
+  generateBtn.addEventListener('click',generatePassword);
+  refreshBtn.addEventListener('click',generatePassword);
+  copyBtn.addEventListener('click', async ()=>{
+    try{ await navigator.clipboard.writeText(output.value);
+      const original=copyBtn.innerHTML;
+      copyBtn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+      setTimeout(()=>{copyBtn.innerHTML=original;},1200);
+    }catch(e){ output.select(); document.execCommand('copy'); }
+  });
+  generatePassword();
+</script>
+</body>
+</html>

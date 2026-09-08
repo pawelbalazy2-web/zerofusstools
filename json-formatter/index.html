@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSON Formatter — Validate & Format Online</title>
+<meta name="description" content="Free JSON formatter and validator. Beautify and check your JSON code — no signup, works entirely in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#241f0e; --surface:#332b14; --line:#4a3e1a; --paper:#f5f0e0; --muted:#b0a375; --accent:#eab308; --red:#e5534b; --green:#4caf6d; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:640px; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:28px; }
+  textarea{ width:100%; min-height:200px; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:16px; font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--paper); outline:none; resize:vertical; }
+  .btn-row{ display:flex; gap:8px; margin:14px 0; }
+  .btn-row button{ font-family:'Sora',sans-serif; font-weight:700; font-size:13.5px; padding:11px 18px; border-radius:6px; border:none; cursor:pointer; }
+  #formatBtn{ background:var(--accent); color:var(--ink); }
+  .secondary-btn{ background:var(--ink); color:var(--muted); border:1px solid var(--line) !important; }
+  .status{ font-family:'IBM Plex Mono',monospace; font-size:13px; padding:10px 14px; border-radius:6px; margin-top:6px; display:none; }
+  .status.ok{ display:block; background:rgba(76,175,109,0.12); color:var(--green); }
+  .status.error{ display:block; background:rgba(229,83,75,0.12); color:var(--red); }
+  footer{ margin-top:48px; color:#5c4f28; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#5c4f28; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / dev</div>
+  <h1>JSON Formatter</h1>
+  <p class="sub">Paste JSON, format it, and check whether it's valid.</p>
+
+  <div class="card">
+    <textarea id="jsonInput" placeholder='{"example": "paste your JSON here", "number": 42}'></textarea>
+    <div class="btn-row"><button id="formatBtn">Format</button><button class="secondary-btn" id="minifyBtn">Minify</button><button class="secondary-btn" id="copyBtn">Copy</button></div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const jsonInput=document.getElementById('jsonInput'), status=document.getElementById('status');
+  function showStatus(ok,message){ status.className='status '+(ok?'ok':'error'); status.textContent=message; }
+  document.getElementById('formatBtn').addEventListener('click',()=>{ try{ const parsed=JSON.parse(jsonInput.value); jsonInput.value=JSON.stringify(parsed,null,2); showStatus(true,'✓ Valid JSON, formatted.'); }catch(e){ showStatus(false,'✗ Syntax error: '+e.message); } });
+  document.getElementById('minifyBtn').addEventListener('click',()=>{ try{ const parsed=JSON.parse(jsonInput.value); jsonInput.value=JSON.stringify(parsed); showStatus(true,'✓ Minified.'); }catch(e){ showStatus(false,'✗ Syntax error: '+e.message); } });
+  document.getElementById('copyBtn').addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(jsonInput.value); }catch(e){} });
+</script>
+</body>
+</html>

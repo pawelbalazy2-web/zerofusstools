@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Password Strength Checker — Free Online</title>
+<meta name="description" content="Check how strong your password is. Analysis of length and character variety — all done locally in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#1c1530; --surface:#251c40; --line:#392c5c; --paper:#ece7f7; --muted:#9a8fc2; --accent:#8b5cf6; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:540px; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:28px; }
+  input[type="text"]{ width:100%; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:16px; font-family:'IBM Plex Mono',monospace; font-size:16px; color:var(--paper); outline:none; }
+  .strength-bars{ display:flex; gap:5px; margin:18px 0 10px; }
+  .strength-bars span{ height:6px; flex:1; background:var(--line); border-radius:3px; }
+  .strength-label{ font-family:'Sora',sans-serif; font-weight:700; font-size:16px; text-align:center; margin-bottom:20px; }
+  .checklist{ display:flex; flex-direction:column; gap:8px; }
+  .check-item{ display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--muted); }
+  .check-item.ok{ color:var(--paper); }
+  .check-icon{ width:16px; height:16px; border-radius:50%; border:1.5px solid var(--line); flex-shrink:0; }
+  .check-item.ok .check-icon{ background:var(--accent); border-color:var(--accent); }
+  footer{ margin-top:48px; color:#4a3d70; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#4a3d70; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / security</div>
+  <h1>Check your password strength</h1>
+  <p class="sub">Type a password to see how resistant it is to cracking. Nothing leaves your browser.</p>
+
+  <div class="card">
+    <input type="text" id="pwInput" placeholder="Type a password to check...">
+    <div class="strength-bars"><span id="b1"></span><span id="b2"></span><span id="b3"></span><span id="b4"></span><span id="b5"></span></div>
+    <div class="strength-label" id="strengthLabel">Type a password above</div>
+    <div class="checklist">
+      <div class="check-item" id="c-length"><span class="check-icon"></span>At least 12 characters</div>
+      <div class="check-item" id="c-upper"><span class="check-icon"></span>Uppercase letters (A-Z)</div>
+      <div class="check-item" id="c-lower"><span class="check-icon"></span>Lowercase letters (a-z)</div>
+      <div class="check-item" id="c-number"><span class="check-icon"></span>Numbers (0-9)</div>
+      <div class="check-item" id="c-symbol"><span class="check-icon"></span>Symbols (!@#$...)</div>
+    </div>
+  </div>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const pwInput=document.getElementById('pwInput');
+  const bars=['b1','b2','b3','b4','b5'].map(id=>document.getElementById(id));
+  const strengthLabel=document.getElementById('strengthLabel');
+  const checks={ length:document.getElementById('c-length'), upper:document.getElementById('c-upper'), lower:document.getElementById('c-lower'), number:document.getElementById('c-number'), symbol:document.getElementById('c-symbol') };
+  function evaluate(){
+    const pw=pwInput.value;
+    const hasLength=pw.length>=12, hasUpper=/[A-Z]/.test(pw), hasLower=/[a-z]/.test(pw), hasNumber=/[0-9]/.test(pw), hasSymbol=/[^A-Za-z0-9]/.test(pw);
+    checks.length.classList.toggle('ok',hasLength); checks.upper.classList.toggle('ok',hasUpper); checks.lower.classList.toggle('ok',hasLower); checks.number.classList.toggle('ok',hasNumber); checks.symbol.classList.toggle('ok',hasSymbol);
+    const score=[hasLength,hasUpper,hasLower,hasNumber,hasSymbol].filter(Boolean).length;
+    const colors=['#e5534b','#e5534b','#e0a458','#e0a458','#8b5cf6'];
+    const labels=['Type a password above','Very weak','Weak','Fair','Good','Very strong'];
+    bars.forEach((bar,i)=>{ bar.style.background = i<score ? colors[Math.min(score-1,4)] : 'var(--line)'; });
+    strengthLabel.textContent = pw.length===0 ? labels[0] : labels[score];
+  }
+  pwInput.addEventListener('input',evaluate); evaluate();
+</script>
+</body>
+</html>

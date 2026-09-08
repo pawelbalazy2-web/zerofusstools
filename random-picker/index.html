@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Number & List Picker — Free Online</title>
+<meta name="description" content="Pick a random number from a range or randomly select a winner from your own list. Free, no signup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#2e1a2e; --surface:#3a2138; --line:#55365a; --paper:#f3e9f0; --muted:#b79cb5; --lime:#c6f135; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'Space Mono',monospace; font-size:13px; color:var(--lime); margin-bottom:14px; }
+  h1{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:580px; background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:12px; }
+  .tabs{ display:flex; gap:4px; margin-bottom:24px; background:var(--ink); padding:4px; border-radius:4px; }
+  .tab{ flex:1; text-align:center; padding:10px 6px; font-size:13.5px; font-weight:500; color:var(--muted); background:transparent; border:none; border-radius:3px; cursor:pointer; }
+  .tab.active{ background:var(--lime); color:var(--ink); }
+  .panel{ padding:8px 24px 28px; display:none; }
+  .panel.active{ display:block; }
+  .range-row{ display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+  .range-row input[type="number"]{ width:90px; background:var(--ink); border:1px solid var(--line); border-radius:3px; padding:12px 14px; font-family:'Space Mono',monospace; font-size:16px; color:var(--paper); outline:none; }
+  textarea{ width:100%; min-height:140px; background:var(--ink); border:1px solid var(--line); border-radius:3px; padding:16px; font-size:14.5px; line-height:1.7; color:var(--paper); outline:none; resize:vertical; margin-bottom:20px; }
+  .draw-btn{ width:100%; background:var(--lime); color:var(--ink); border:none; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px; padding:15px; border-radius:3px; cursor:pointer; }
+  .result-box{ margin-top:20px; background:var(--ink); border:1px solid var(--line); border-radius:3px; padding:28px; text-align:center; min-height:40px; display:flex; align-items:center; justify-content:center; }
+  .result-value{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:30px; color:var(--lime); word-break:break-word; }
+  footer{ margin-top:48px; color:#5c3f5a; font-size:12px; font-family:'Space Mono',monospace; text-align:center; }
+  footer a{ color:#5c3f5a; }
+  .content{ width:100%; max-width:600px; margin-top:64px; padding-top:48px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:22px; margin:40px 0 14px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#cbb8ca; font-size:15px; line-height:1.75; margin:0 0 14px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / random</div>
+  <h1>Pick something random</h1>
+  <p class="sub">A random number from a range, or a random winner from your list.</p>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" data-panel="number">Random number</button>
+      <button class="tab" data-panel="list">Pick from list</button>
+    </div>
+    <div class="panel active" id="panel-number">
+      <div class="range-row">from <input type="number" id="minNum" value="1"> to <input type="number" id="maxNum" value="100"></div>
+      <button class="draw-btn" id="drawNumberBtn">Draw number</button>
+      <div class="result-box"><div class="result-value" id="numberResult">—</div></div>
+    </div>
+    <div class="panel" id="panel-list">
+      <textarea id="listInput" placeholder="Type names or options, one per line&#10;e.g.&#10;Alice&#10;Bob&#10;Carol"></textarea>
+      <button class="draw-btn" id="drawListBtn">Pick from list</button>
+      <div class="result-box"><div class="result-value" id="listResult">—</div></div>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>What this tool is for</h2>
+    <p>Drawing a giveaway winner, assigning presentation order, choosing a restaurant among a few options — anywhere you need a fair, random pick. Uses your browser's built-in randomness engine.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const tabs=document.querySelectorAll('.tab'), panels=document.querySelectorAll('.panel');
+  tabs.forEach(tab=>tab.addEventListener('click',()=>{ tabs.forEach(t=>t.classList.remove('active')); panels.forEach(p=>p.classList.remove('active')); tab.classList.add('active'); document.getElementById('panel-'+tab.dataset.panel).classList.add('active'); }));
+
+  const minNum=document.getElementById('minNum'), maxNum=document.getElementById('maxNum'), numberResult=document.getElementById('numberResult');
+  function animateNumber(finalValue,min,max){ let ticks=0; const maxTicks=15;
+    const interval=setInterval(()=>{ ticks++; if(ticks<maxTicks){ numberResult.textContent=Math.floor(Math.random()*(max-min+1))+min; } else{ clearInterval(interval); numberResult.textContent=finalValue; } },40); }
+  document.getElementById('drawNumberBtn').addEventListener('click',()=>{ const min=parseInt(minNum.value,10)||0, max=parseInt(maxNum.value,10)||0; if(min>max) return; const result=Math.floor(Math.random()*(max-min+1))+min; animateNumber(result,min,max); });
+
+  const listInput=document.getElementById('listInput'), listResult=document.getElementById('listResult');
+  function animateList(items,finalValue){ let ticks=0; const maxTicks=15;
+    const interval=setInterval(()=>{ ticks++; if(ticks<maxTicks){ listResult.textContent=items[Math.floor(Math.random()*items.length)]; } else{ clearInterval(interval); listResult.textContent=finalValue; } },60); }
+  document.getElementById('drawListBtn').addEventListener('click',()=>{ const items=listInput.value.split('\n').map(s=>s.trim()).filter(s=>s.length>0); if(items.length===0) return; const winner=items[Math.floor(Math.random()*items.length)]; animateList(items,winner); });
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Code Generator — Free, No Signup</title>
+<meta name="description" content="Free QR code generator. Create a QR code from any link or text and download it as PNG — no signup required.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{ --paper:#f5f4f0; --surface:#ffffff; --ink:#141414; --line:#dedad0; --muted:#6b675e; --red:#e63946; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--red); margin-bottom:14px; }
+  h1{ font-family:'Archivo',sans-serif; font-weight:700; font-size:clamp(30px,4.8vw,46px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:560px; background:var(--surface); border:2px solid var(--ink); border-radius:4px; padding:32px; }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted); margin-bottom:8px; }
+  input[type="text"]{ width:100%; background:var(--paper); border:1.5px solid var(--line); border-radius:3px; padding:14px 16px; font-size:15px; color:var(--ink); outline:none; }
+  .size-row{ display:flex; gap:8px; }
+  .size-btn{ flex:1; padding:10px 6px; background:var(--paper); border:1.5px solid var(--line); border-radius:3px; font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--muted); cursor:pointer; }
+  .size-btn.active{ background:var(--ink); border-color:var(--ink); color:var(--paper); }
+  .generate-btn{ width:100%; background:var(--red); color:#fff; border:none; font-family:'Archivo',sans-serif; font-weight:700; font-size:15px; padding:15px; border-radius:3px; cursor:pointer; margin-top:8px; }
+  .output-area{ margin-top:28px; padding-top:28px; border-top:1.5px dashed var(--line); display:none; flex-direction:column; align-items:center; }
+  .output-area.visible{ display:flex; }
+  #qrcode{ padding:16px; background:#fff; border:2px solid var(--ink); border-radius:4px; }
+  .download-btn{ margin-top:18px; background:var(--ink); color:var(--paper); border:none; font-family:'Archivo',sans-serif; font-weight:600; font-size:14px; padding:12px 24px; border-radius:3px; cursor:pointer; }
+  footer{ margin-top:48px; color:#a8a498; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#a8a498; }
+  .content{ width:100%; max-width:600px; margin-top:64px; padding-top:48px; border-top:1.5px dashed var(--line); }
+  .content h2{ font-family:'Archivo',sans-serif; font-weight:700; font-size:22px; margin:40px 0 14px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#4a473f; font-size:15px; line-height:1.75; margin:0 0 14px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / sharing</div>
+  <h1>Generate a QR Code</h1>
+  <p class="sub">From a link, text, or phone number — ready to download in seconds.</p>
+
+  <div class="card">
+    <div class="field"><label>TEXT OR URL</label><input type="text" id="qrText" value="https://example.com"></div>
+    <div class="field"><label>SIZE</label>
+      <div class="size-row">
+        <button class="size-btn" data-size="150">150px</button>
+        <button class="size-btn active" data-size="250">250px</button>
+        <button class="size-btn" data-size="350">350px</button>
+        <button class="size-btn" data-size="500">500px</button>
+      </div>
+    </div>
+    <button class="generate-btn" id="generateBtn">Generate QR code</button>
+    <div class="output-area" id="outputArea"><div id="qrcode"></div><button class="download-btn" id="downloadBtn">Download PNG</button></div>
+  </div>
+
+  <section class="content">
+    <h2>What QR codes are useful for</h2>
+    <p>QR codes are a fast way to move someone from print (a business card, poster, or menu) straight to a webpage — just a camera scan. Handy for sharing a link, phone number, Wi-Fi details, or a payment link.</p>
+    <h2>How this generator works</h2>
+    <p>The QR code is created entirely in your browser — the text you enter is never sent to a server. Download it as PNG and use it anywhere.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  let currentSize=250;
+  const qrText=document.getElementById('qrText'), sizeButtons=document.querySelectorAll('.size-btn'), generateBtn=document.getElementById('generateBtn'), outputArea=document.getElementById('outputArea'), qrcodeDiv=document.getElementById('qrcode'), downloadBtn=document.getElementById('downloadBtn');
+  sizeButtons.forEach(btn=>btn.addEventListener('click',()=>{ sizeButtons.forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentSize=parseInt(btn.dataset.size,10); }));
+  function generate(){
+    const text=qrText.value.trim(); if(!text) return;
+    qrcodeDiv.innerHTML='';
+    new QRCode(qrcodeDiv,{ text:text, width:currentSize, height:currentSize, colorDark:'#141414', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M });
+    outputArea.classList.add('visible');
+  }
+  generateBtn.addEventListener('click',generate);
+  qrText.addEventListener('keypress',e=>{ if(e.key==='Enter') generate(); });
+  downloadBtn.addEventListener('click',()=>{
+    setTimeout(()=>{ const canvas=qrcodeDiv.querySelector('canvas'); if(!canvas)return;
+      const link=document.createElement('a'); link.download='qr-code.png'; link.href=canvas.toDataURL('image/png'); link.click();
+    },100);
+  });
+  generate();
+</script>
+</body>
+</html>

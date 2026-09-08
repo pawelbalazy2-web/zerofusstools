@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tip Calculator — Split the Bill Online</title>
+<meta name="description" content="Free tip calculator. Calculate the tip and split the bill among friends — no signup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --bg:#f0f1ee; --surface:#ffffff; --ink:#202124; --line:#dfe1dc; --muted:#6b6f68; --green:#16a34a; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--green); margin-bottom:14px; }
+  h1{ font-family:'Manrope',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:560px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:28px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+  .field{ margin-bottom:20px; }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted); margin-bottom:8px; }
+  input[type="text"], input[type="number"]{ width:100%; background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:14px 16px; font-family:'IBM Plex Mono',monospace; font-size:18px; color:var(--ink); outline:none; }
+  .tip-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .tip-btn{ flex:1; min-width:56px; padding:12px 6px; background:var(--bg); border:1px solid var(--line); border-radius:6px; font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:500; color:var(--muted); cursor:pointer; }
+  .tip-btn.active{ background:var(--green); border-color:var(--green); color:#fff; }
+  .people-row{ display:flex; align-items:center; gap:12px; }
+  .people-row button{ width:44px; height:44px; border-radius:6px; border:1px solid var(--line); background:var(--bg); color:var(--ink); font-size:20px; cursor:pointer; flex-shrink:0; }
+  .people-row input{ text-align:center; }
+  .results{ margin-top:24px; padding-top:24px; border-top:1px dashed var(--line); }
+  .result-row{ display:flex; justify-content:space-between; align-items:center; padding:10px 0; }
+  .result-row .label{ font-size:14px; color:var(--muted); }
+  .result-row .value{ font-family:'IBM Plex Mono',monospace; font-size:16px; font-weight:500; }
+  .result-row.highlight .value{ font-size:26px; font-weight:700; color:var(--green); }
+  footer{ margin-top:48px; color:#9a9d97; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#9a9d97; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / everyday</div>
+  <h1>Tip Calculator</h1>
+  <p class="sub">Work out the tip and split the bill among friends in seconds.</p>
+
+  <div class="card">
+    <div class="field"><label>BILL AMOUNT</label><input type="text" id="billAmount" value="150"></div>
+    <div class="field"><label>TIP</label>
+      <div class="tip-row">
+        <button class="tip-btn" data-tip="0">0%</button>
+        <button class="tip-btn" data-tip="10">10%</button>
+        <button class="tip-btn active" data-tip="15">15%</button>
+        <button class="tip-btn" data-tip="20">20%</button>
+        <button class="tip-btn" data-tip="custom">Custom</button>
+      </div>
+    </div>
+    <div class="field" id="customTipField" style="display:none;"><label>CUSTOM TIP %</label><input type="number" id="customTip" value="15"></div>
+    <div class="field"><label>NUMBER OF PEOPLE</label>
+      <div class="people-row"><button id="peopleMinus">−</button><input type="number" id="peopleCount" value="1" min="1"><button id="peoplePlus">+</button></div>
+    </div>
+    <div class="results">
+      <div class="result-row"><span class="label">Tip amount</span><span class="value" id="tipAmount">$0.00</span></div>
+      <div class="result-row"><span class="label">Total with tip</span><span class="value" id="totalAmount">$0.00</span></div>
+      <div class="result-row highlight"><span class="label">Per person</span><span class="value" id="perPersonAmount">$0.00</span></div>
+    </div>
+  </div>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const billAmount=document.getElementById('billAmount'), tipButtons=document.querySelectorAll('.tip-btn'), customTipField=document.getElementById('customTipField'), customTip=document.getElementById('customTip'), peopleCount=document.getElementById('peopleCount');
+  let currentTipPercent=15;
+  function formatUSD(v){ return '$'+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function calculate(){
+    const bill=parseFloat(billAmount.value.replace(',','.'))||0, people=Math.max(1,parseInt(peopleCount.value,10)||1), tipPct=currentTipPercent;
+    const tip=bill*(tipPct/100), total=bill+tip, perPerson=total/people;
+    document.getElementById('tipAmount').textContent=formatUSD(tip);
+    document.getElementById('totalAmount').textContent=formatUSD(total);
+    document.getElementById('perPersonAmount').textContent=formatUSD(perPerson);
+  }
+  tipButtons.forEach(btn=>btn.addEventListener('click',()=>{
+    tipButtons.forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+    if(btn.dataset.tip==='custom'){ customTipField.style.display='block'; currentTipPercent=parseFloat(customTip.value)||0; }
+    else{ customTipField.style.display='none'; currentTipPercent=parseFloat(btn.dataset.tip); }
+    calculate();
+  }));
+  customTip.addEventListener('input',()=>{ currentTipPercent=parseFloat(customTip.value)||0; calculate(); });
+  billAmount.addEventListener('input',calculate); peopleCount.addEventListener('input',calculate);
+  document.getElementById('peopleMinus').addEventListener('click',()=>{ peopleCount.value=Math.max(1,(parseInt(peopleCount.value,10)||1)-1); calculate(); });
+  document.getElementById('peoplePlus').addEventListener('click',()=>{ peopleCount.value=(parseInt(peopleCount.value,10)||1)+1; calculate(); });
+  calculate();
+</script>
+</body>
+</html>

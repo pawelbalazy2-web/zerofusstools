@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stopwatch & Timer — Online, Free</title>
+<meta name="description" content="Free online stopwatch and countdown timer. Track time with lap splits or set a countdown with an alarm.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#22282f; --surface:#2b323b; --surface-raised:#333c46; --line:#414b57; --paper:#eef1f4; --muted:#8b95a3; --amber:#ffb400; --green:#4caf6d; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'Space Mono',monospace; font-size:13px; color:var(--amber); margin-bottom:14px; }
+  h1{ font-family:'Oswald',sans-serif; font-weight:600; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; text-transform:uppercase; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:560px; background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:12px; }
+  .tabs{ display:flex; gap:4px; margin-bottom:24px; background:var(--ink); padding:4px; border-radius:4px; }
+  .tab{ flex:1; text-align:center; padding:10px 6px; font-size:13.5px; font-weight:500; color:var(--muted); background:transparent; border:none; border-radius:3px; cursor:pointer; }
+  .tab.active{ background:var(--amber); color:var(--ink); }
+  .panel{ padding:8px 24px 28px; display:none; }
+  .panel.active{ display:block; }
+  .display{ text-align:center; font-family:'Space Mono',monospace; font-weight:700; font-size:56px; padding:32px 0; }
+  .display .ms{ font-size:28px; color:var(--muted); }
+  .controls{ display:flex; gap:10px; justify-content:center; margin-bottom:8px; }
+  .controls button{ font-family:'Oswald',sans-serif; font-weight:600; font-size:14px; text-transform:uppercase; padding:13px 26px; border-radius:3px; border:none; cursor:pointer; }
+  .btn-start{ background:var(--green); color:#fff; } .btn-pause{ background:var(--amber); color:var(--ink); }
+  .btn-reset{ background:var(--ink); color:var(--muted); border:1px solid var(--line) !important; }
+  .btn-lap{ background:var(--surface-raised); color:var(--paper); border:1px solid var(--line) !important; }
+  .laps{ margin-top:20px; max-height:180px; overflow-y:auto; }
+  .lap-row{ display:flex; justify-content:space-between; padding:10px 4px; border-bottom:1px solid var(--line); font-family:'Space Mono',monospace; font-size:13.5px; color:var(--muted); }
+  .lap-row span:first-child{ color:var(--paper); }
+  .timer-setup{ display:flex; gap:12px; justify-content:center; margin-bottom:20px; }
+  .timer-setup .unit{ text-align:center; }
+  .timer-setup input{ width:70px; background:var(--ink); border:1px solid var(--line); border-radius:3px; padding:12px; font-family:'Space Mono',monospace; font-size:22px; color:var(--paper); text-align:center; outline:none; }
+  .timer-setup label{ display:block; font-size:11px; color:var(--muted); margin-top:6px; }
+  footer{ margin-top:48px; color:#4a5260; font-size:12px; font-family:'Space Mono',monospace; text-align:center; }
+  footer a{ color:#4a5260; }
+  .content{ width:100%; max-width:600px; margin-top:64px; padding-top:48px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Oswald',sans-serif; font-weight:600; font-size:22px; margin:40px 0 14px; text-transform:uppercase; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#c1c8d1; font-size:15px; line-height:1.75; margin:0 0 14px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / time</div>
+  <h1>Stopwatch & Timer</h1>
+  <p class="sub">Track time to the hundredth of a second or set a countdown with alarm.</p>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" data-panel="stopwatch">Stopwatch</button>
+      <button class="tab" data-panel="timer">Timer</button>
+    </div>
+    <div class="panel active" id="panel-stopwatch">
+      <div class="display" id="swDisplay">00:00<span class="ms">.00</span></div>
+      <div class="controls">
+        <button class="btn-start" id="swStartBtn">Start</button>
+        <button class="btn-lap" id="swLapBtn" disabled>Lap</button>
+        <button class="btn-reset" id="swResetBtn">Reset</button>
+      </div>
+      <div class="laps" id="swLaps"></div>
+    </div>
+    <div class="panel" id="panel-timer">
+      <div class="timer-setup" id="timerSetup">
+        <div class="unit"><input type="number" id="tMin" value="5" min="0" max="99"><label>MINUTES</label></div>
+        <div class="unit"><input type="number" id="tSec" value="0" min="0" max="59"><label>SECONDS</label></div>
+      </div>
+      <div class="display" id="tDisplay">05:00</div>
+      <div class="controls"><button class="btn-start" id="tStartBtn">Start</button><button class="btn-reset" id="tResetBtn">Reset</button></div>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>Stopwatch vs. timer</h2>
+    <p>A stopwatch counts up from zero — useful for tracking how long a task takes. A timer counts down from a set value and alerts you with a sound when it's done — perfect for cooking, workouts, or the Pomodoro technique.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const tabs=document.querySelectorAll('.tab'), panels=document.querySelectorAll('.panel');
+  tabs.forEach(tab=>tab.addEventListener('click',()=>{ tabs.forEach(t=>t.classList.remove('active')); panels.forEach(p=>p.classList.remove('active')); tab.classList.add('active'); document.getElementById('panel-'+tab.dataset.panel).classList.add('active'); }));
+
+  let swRunning=false, swStartTime=0, swElapsed=0, swInterval=null, lapCount=0;
+  const swDisplay=document.getElementById('swDisplay'), swStartBtn=document.getElementById('swStartBtn'), swLapBtn=document.getElementById('swLapBtn'), swResetBtn=document.getElementById('swResetBtn'), swLaps=document.getElementById('swLaps');
+  function formatTime(ms){ const totalMs=Math.floor(ms); const minutes=Math.floor(totalMs/60000); const seconds=Math.floor((totalMs%60000)/1000); const centis=Math.floor((totalMs%1000)/10);
+    return { main:`${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`, ms:String(centis).padStart(2,'0') }; }
+  function updateSwDisplay(){ const {main,ms}=formatTime(swElapsed); swDisplay.innerHTML=`${main}<span class="ms">.${ms}</span>`; }
+  function swTick(){ swElapsed=Date.now()-swStartTime; updateSwDisplay(); }
+  swStartBtn.addEventListener('click',()=>{
+    if(!swRunning){ swRunning=true; swStartTime=Date.now()-swElapsed; swInterval=setInterval(swTick,10); swStartBtn.textContent='Pause'; swStartBtn.className='btn-pause'; swLapBtn.disabled=false; }
+    else{ swRunning=false; clearInterval(swInterval); swStartBtn.textContent='Resume'; swStartBtn.className='btn-start'; }
+  });
+  swLapBtn.addEventListener('click',()=>{ lapCount++; const {main,ms}=formatTime(swElapsed); const row=document.createElement('div'); row.className='lap-row'; row.innerHTML=`<span>Lap ${lapCount}</span><span>${main}.${ms}</span>`; swLaps.prepend(row); });
+  swResetBtn.addEventListener('click',()=>{ swRunning=false; clearInterval(swInterval); swElapsed=0; lapCount=0; updateSwDisplay(); swStartBtn.textContent='Start'; swStartBtn.className='btn-start'; swLapBtn.disabled=true; swLaps.innerHTML=''; });
+
+  let tRunning=false, tRemaining=0, tInterval=null;
+  const tMin=document.getElementById('tMin'), tSec=document.getElementById('tSec'), tDisplay=document.getElementById('tDisplay'), tStartBtn=document.getElementById('tStartBtn'), tResetBtn=document.getElementById('tResetBtn'), timerSetup=document.getElementById('timerSetup');
+  function updateTDisplay(){ const m=Math.floor(tRemaining/60), s=tRemaining%60; tDisplay.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
+  function playBeep(){ try{ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const osc=ctx.createOscillator(); const gain=ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.frequency.value=880; gain.gain.setValueAtTime(0.2,ctx.currentTime); osc.start(); osc.stop(ctx.currentTime+0.6); }catch(e){} }
+  function setInitialTRemaining(){ tRemaining=(parseInt(tMin.value,10)||0)*60+(parseInt(tSec.value,10)||0); updateTDisplay(); }
+  tMin.addEventListener('input',setInitialTRemaining); tSec.addEventListener('input',setInitialTRemaining);
+  tStartBtn.addEventListener('click',()=>{
+    if(!tRunning){ if(tRemaining<=0) setInitialTRemaining(); if(tRemaining<=0) return;
+      tRunning=true; timerSetup.style.opacity='0.4'; tStartBtn.textContent='Pause'; tStartBtn.className='btn-pause';
+      tInterval=setInterval(()=>{ tRemaining--; updateTDisplay(); if(tRemaining<=0){ clearInterval(tInterval); tRunning=false; tStartBtn.textContent='Start'; tStartBtn.className='btn-start'; timerSetup.style.opacity='1'; playBeep(); } },1000);
+    } else{ tRunning=false; clearInterval(tInterval); tStartBtn.textContent='Resume'; tStartBtn.className='btn-start'; }
+  });
+  tResetBtn.addEventListener('click',()=>{ tRunning=false; clearInterval(tInterval); timerSetup.style.opacity='1'; tStartBtn.textContent='Start'; tStartBtn.className='btn-start'; setInitialTRemaining(); });
+  setInitialTRemaining();
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit Converter — Length, Weight, Temperature, Volume</title>
+<meta name="description" content="Free unit converter online. Convert km to miles, kg to pounds, Celsius to Fahrenheit and more — fast, accurate, no signup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --deep:#0f1f38; --surface:#16294a; --line:#2a3f66; --paper:#e9edf5; --muted:#7c8aa0; --amber:#ff9f1c; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background-color:var(--deep); background-image:linear-gradient(rgba(255,255,255,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.045) 1px,transparent 1px); background-size:32px 32px; color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--amber); margin-bottom:14px; }
+  h1{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:620px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:600px; background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:12px; }
+  .tabs{ display:flex; gap:4px; margin-bottom:24px; background:var(--deep); padding:4px; border-radius:4px; }
+  .tab{ flex:1; text-align:center; padding:10px 6px; font-size:13.5px; font-weight:500; color:var(--muted); background:transparent; border:none; border-radius:3px; cursor:pointer; }
+  .tab.active{ background:var(--amber); color:var(--deep); }
+  .converter{ padding:12px 24px 28px; }
+  .field-row{ display:flex; gap:10px; margin-bottom:16px; }
+  input[type="text"]{ flex:1; min-width:0; background:var(--deep); border:1px solid var(--line); border-radius:3px; padding:16px; font-family:'JetBrains Mono',monospace; font-size:20px; color:var(--paper); outline:none; }
+  select{ background:var(--deep); border:1px solid var(--line); border-radius:3px; padding:0 14px; font-size:14px; font-weight:500; color:var(--paper); cursor:pointer; min-width:140px; }
+  .swap-row{ display:flex; justify-content:center; margin:-6px 0 10px; }
+  .swap-btn{ width:36px; height:36px; border-radius:50%; background:var(--deep); border:1px solid var(--line); color:var(--muted); cursor:pointer; }
+  .result-note{ margin-top:18px; font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--muted); text-align:center; }
+  .result-note b{ color:var(--amber); }
+  footer{ margin-top:48px; color:#4a5876; font-size:12px; font-family:'JetBrains Mono',monospace; text-align:center; }
+  footer a{ color:#4a5876; }
+  .content{ width:100%; max-width:620px; margin-top:64px; padding-top:48px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:22px; margin:40px 0 14px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#b8c2d6; font-size:15px; line-height:1.75; margin:0 0 14px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / conversion</div>
+  <h1>Convert units<br>in seconds</h1>
+  <p class="sub">Length, weight, temperature, volume — accurate conversions, right in your browser.</p>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" data-cat="length">Length</button>
+      <button class="tab" data-cat="weight">Weight</button>
+      <button class="tab" data-cat="temp">Temperature</button>
+      <button class="tab" data-cat="volume">Volume</button>
+    </div>
+    <div class="converter">
+      <div class="field-row"><input type="text" id="inputA" value="1"><select id="unitA"></select></div>
+      <div class="swap-row"><button class="swap-btn" id="swapBtn">⇅</button></div>
+      <div class="field-row"><input type="text" id="inputB" value=""><select id="unitB"></select></div>
+      <div class="result-note" id="resultNote"></div>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>How to use this converter</h2>
+    <p>Type a value into either box — the other one converts automatically in real time. Change the conversion direction with the arrow in the middle, or pick different units from the dropdowns. All calculations happen locally in your browser, nothing is sent to a server.</p>
+    <h2>Common conversions</h2>
+    <p>1 km ≈ 0.6214 miles · 1 kg ≈ 2.2046 lb · 1 inch = 2.54 cm exactly · 0°C = 32°F · 1 liter ≈ 0.2642 US gallons.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const UNITS = {
+    length:{ base:'m', units:{ mm:{name:'Millimeters (mm)',toBase:0.001}, cm:{name:'Centimeters (cm)',toBase:0.01}, m:{name:'Meters (m)',toBase:1}, km:{name:'Kilometers (km)',toBase:1000}, in:{name:'Inches (in)',toBase:0.0254}, ft:{name:'Feet (ft)',toBase:0.3048}, yd:{name:'Yards (yd)',toBase:0.9144}, mi:{name:'Miles (mi)',toBase:1609.344} }, default:['km','mi'] },
+    weight:{ base:'kg', units:{ mg:{name:'Milligrams (mg)',toBase:0.000001}, g:{name:'Grams (g)',toBase:0.001}, kg:{name:'Kilograms (kg)',toBase:1}, t:{name:'Tonnes (t)',toBase:1000}, oz:{name:'Ounces (oz)',toBase:0.0283495}, lb:{name:'Pounds (lb)',toBase:0.453592} }, default:['kg','lb'] },
+    temp:{ base:'c', units:{ c:{name:'Celsius (°C)'}, f:{name:'Fahrenheit (°F)'}, k:{name:'Kelvin (K)'} }, default:['c','f'] },
+    volume:{ base:'l', units:{ ml:{name:'Milliliters (ml)',toBase:0.001}, l:{name:'Liters (l)',toBase:1}, m3:{name:'Cubic meters (m³)',toBase:1000}, galUS:{name:'US gallons',toBase:3.78541}, qtUS:{name:'US quarts',toBase:0.946353}, cup:{name:'Cups (US)',toBase:0.24} }, default:['l','galUS'] }
+  };
+  let currentCat='length';
+  const tabs=document.querySelectorAll('.tab'), inputA=document.getElementById('inputA'), inputB=document.getElementById('inputB'), unitA=document.getElementById('unitA'), unitB=document.getElementById('unitB'), swapBtn=document.getElementById('swapBtn'), resultNote=document.getElementById('resultNote');
+
+  function populateUnits(cat){
+    const def=UNITS[cat]; unitA.innerHTML=''; unitB.innerHTML='';
+    Object.keys(def.units).forEach(key=>{
+      const oA=document.createElement('option'); oA.value=key; oA.textContent=def.units[key].name; unitA.appendChild(oA);
+      const oB=document.createElement('option'); oB.value=key; oB.textContent=def.units[key].name; unitB.appendChild(oB);
+    });
+    unitA.value=def.default[0]; unitB.value=def.default[1];
+  }
+  function tempToCelsius(v,u){ if(u==='c')return v; if(u==='f')return (v-32)*5/9; if(u==='k')return v-273.15; }
+  function celsiusToTarget(c,u){ if(u==='c')return c; if(u==='f')return c*9/5+32; if(u==='k')return c+273.15; }
+  function convert(value,fromUnit,toUnit,cat){
+    if(cat==='temp'){ const c=tempToCelsius(value,fromUnit); return celsiusToTarget(c,toUnit); }
+    const def=UNITS[cat]; const base=value*def.units[fromUnit].toBase; return base/def.units[toUnit].toBase;
+  }
+  function formatNum(n){ if(!isFinite(n))return ''; return (Math.round(n*10000)/10000).toString(); }
+  function updateFromA(){
+    const val=parseFloat(inputA.value.replace(',','.'));
+    if(isNaN(val)){ inputB.value=''; resultNote.textContent=''; return; }
+    inputB.value=formatNum(convert(val,unitA.value,unitB.value,currentCat));
+    updateNote();
+  }
+  function updateNote(){
+    const oneConverted=convert(1,unitA.value,unitB.value,currentCat);
+    resultNote.innerHTML=`1 ${unitA.value} = <b>${formatNum(oneConverted)}</b> ${unitB.value}`;
+  }
+  tabs.forEach(tab=>tab.addEventListener('click',()=>{
+    tabs.forEach(t=>t.classList.remove('active')); tab.classList.add('active');
+    currentCat=tab.dataset.cat; populateUnits(currentCat); inputA.value='1'; updateFromA();
+  }));
+  inputA.addEventListener('input',updateFromA);
+  inputB.addEventListener('input',()=>{ const val=parseFloat(inputB.value.replace(',','.')); if(isNaN(val))return; inputA.value=formatNum(convert(val,unitB.value,unitA.value,currentCat)); updateNote(); });
+  unitA.addEventListener('change',updateFromA); unitB.addEventListener('change',updateFromA);
+  swapBtn.addEventListener('click',()=>{ const t=unitA.value; unitA.value=unitB.value; unitB.value=t; updateFromA(); });
+  populateUnits(currentCat); updateFromA();
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base64 Converter — Encode & Decode Online</title>
+<meta name="description" content="Free Base64 encoder and decoder. Encode or decode text in Base64 format — no signup, runs entirely in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#0e2a30; --surface:#153740; --line:#204b56; --paper:#e6f4f6; --muted:#7fa8b0; --accent:#06b6d4; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:600px; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:28px; }
+  .tabs{ display:flex; gap:4px; margin-bottom:20px; background:var(--ink); padding:4px; border-radius:6px; }
+  .tab{ flex:1; text-align:center; padding:10px; font-size:13.5px; font-weight:500; color:var(--muted); background:transparent; border:none; border-radius:4px; cursor:pointer; }
+  .tab.active{ background:var(--accent); color:var(--ink); }
+  textarea{ width:100%; min-height:140px; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:16px; font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--paper); outline:none; resize:vertical; margin-bottom:12px; }
+  .arrow{ text-align:center; color:var(--accent); font-size:20px; margin:6px 0; }
+  .btn-row{ display:flex; gap:8px; margin-top:6px; }
+  .btn-row button{ flex:1; font-size:13px; font-weight:600; padding:11px; border-radius:6px; border:1px solid var(--line); background:var(--ink); color:var(--muted); cursor:pointer; }
+  footer{ margin-top:48px; color:#3f5f66; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#3f5f66; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / dev</div>
+  <h1>Base64 Converter</h1>
+  <p class="sub">Encode or decode text in Base64.</p>
+
+  <div class="card">
+    <div class="tabs"><button class="tab active" data-mode="encode">Encode (text → Base64)</button><button class="tab" data-mode="decode">Decode (Base64 → text)</button></div>
+    <textarea id="inputText" placeholder="Type text..."></textarea>
+    <div class="arrow">↓</div>
+    <textarea id="outputText" placeholder="Result appears here..." readonly></textarea>
+    <div class="btn-row"><button id="copyBtn">Copy result</button><button id="swapBtn">Swap direction</button><button id="clearBtn">Clear</button></div>
+  </div>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  let mode='encode';
+  const tabs=document.querySelectorAll('.tab'), inputText=document.getElementById('inputText'), outputText=document.getElementById('outputText');
+  function process(){
+    try{
+      if(mode==='encode'){ outputText.value=btoa(unescape(encodeURIComponent(inputText.value))); }
+      else{ outputText.value=decodeURIComponent(escape(atob(inputText.value))); }
+    }catch(e){ outputText.value='Error: invalid input for the selected mode.'; }
+  }
+  tabs.forEach(tab=>tab.addEventListener('click',()=>{ tabs.forEach(t=>t.classList.remove('active')); tab.classList.add('active'); mode=tab.dataset.mode; process(); }));
+  inputText.addEventListener('input',process);
+  document.getElementById('copyBtn').addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(outputText.value); }catch(e){} });
+  document.getElementById('swapBtn').addEventListener('click',()=>{ const tmp=inputText.value; inputText.value=outputText.value;
+    tabs.forEach(t=>t.classList.remove('active'));
+    if(mode==='encode'){ mode='decode'; tabs[1].classList.add('active'); } else{ mode='encode'; tabs[0].classList.add('active'); }
+    process();
+  });
+  document.getElementById('clearBtn').addEventListener('click',()=>{ inputText.value=''; outputText.value=''; });
+</script>
+</body>
+</html>

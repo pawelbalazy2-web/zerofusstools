@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Date Calculator — Days Between Dates, Age Calculator</title>
+<meta name="description" content="Free date calculator. Find days between two dates, add or subtract days, calculate exact age — no signup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#1a1530; --surface:#241d42; --line:#3a3163; --paper:#ece7f5; --muted:#9084b5; --gold:#e8b64c; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'Space Mono',monospace; font-size:13px; color:var(--gold); margin-bottom:14px; }
+  h1{ font-family:'Spectral',serif; font-weight:500; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:600px; background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:12px; }
+  .tabs{ display:flex; gap:4px; margin-bottom:24px; background:var(--ink); padding:4px; border-radius:4px; }
+  .tab{ flex:1; text-align:center; padding:10px 6px; font-size:13px; font-weight:500; color:var(--muted); background:transparent; border:none; border-radius:3px; cursor:pointer; }
+  .tab.active{ background:var(--gold); color:var(--ink); }
+  .panel{ padding:8px 24px 28px; display:none; }
+  .panel.active{ display:block; }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-size:13px; color:var(--muted); margin-bottom:8px; }
+  input[type="date"], input[type="number"]{ width:100%; background:var(--ink); border:1px solid var(--line); border-radius:3px; padding:14px 16px; font-family:'Space Mono',monospace; font-size:16px; color:var(--paper); outline:none; color-scheme:dark; }
+  select{ background:var(--ink); border:1px solid var(--line); border-radius:3px; padding:0 14px; height:48px; color:var(--paper); cursor:pointer; }
+  .result-box{ margin-top:20px; background:var(--ink); border:1px solid var(--line); border-radius:3px; padding:24px; text-align:center; }
+  .result-value{ font-family:'Space Mono',monospace; font-weight:700; font-size:32px; color:var(--gold); }
+  .result-sub{ font-size:13px; color:var(--muted); margin-top:8px; }
+  footer{ margin-top:48px; color:#4d4478; font-size:12px; font-family:'Space Mono',monospace; text-align:center; }
+  footer a{ color:#4d4478; }
+  .content{ width:100%; max-width:620px; margin-top:64px; padding-top:48px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Spectral',serif; font-weight:500; font-size:22px; margin:40px 0 14px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#c9c3e3; font-size:15px; line-height:1.75; margin:0 0 14px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / calendar</div>
+  <h1>Calculate the difference between dates</h1>
+  <p class="sub">Find how many days have passed, remain, or add days to a date.</p>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" data-panel="diff">Date difference</button>
+      <button class="tab" data-panel="addsub">Add / subtract days</button>
+      <button class="tab" data-panel="age">Age</button>
+    </div>
+    <div class="panel active" id="panel-diff">
+      <div class="field"><label>Start date</label><input type="date" id="dateStart"></div>
+      <div class="field"><label>End date</label><input type="date" id="dateEnd"></div>
+      <div class="result-box"><div class="result-value" id="diffResult">—</div><div class="result-sub" id="diffSub"></div></div>
+    </div>
+    <div class="panel" id="panel-addsub">
+      <div class="field"><label>Base date</label><input type="date" id="baseDate"></div>
+      <div class="field"><label>Number of days</label>
+        <div style="display:flex;gap:10px;"><input type="number" id="daysAmount" value="30">
+        <select id="addSubMode"><option value="add">add</option><option value="sub">subtract</option></select></div>
+      </div>
+      <div class="result-box"><div class="result-value" id="addSubResult">—</div><div class="result-sub" id="addSubSub"></div></div>
+    </div>
+    <div class="panel" id="panel-age">
+      <div class="field"><label>Date of birth</label><input type="date" id="birthDate"></div>
+      <div class="result-box"><div class="result-value" id="ageResult">—</div><div class="result-sub" id="ageSub"></div></div>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>What this tool is for</h2>
+    <p>Counting days by hand in a calendar is tedious and error-prone, especially across leap years. This tool gives you exact results: how many days until an important event, how many days have passed since a date, or what date falls a certain number of days from now.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const tabs=document.querySelectorAll('.tab'), panels=document.querySelectorAll('.panel');
+  tabs.forEach(tab=>tab.addEventListener('click',()=>{
+    tabs.forEach(t=>t.classList.remove('active')); panels.forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active'); document.getElementById('panel-'+tab.dataset.panel).classList.add('active');
+  }));
+  const dateStart=document.getElementById('dateStart'), dateEnd=document.getElementById('dateEnd');
+  function updateDiff(){
+    if(!dateStart.value||!dateEnd.value){ document.getElementById('diffResult').textContent='—'; document.getElementById('diffSub').textContent=''; return; }
+    const d1=new Date(dateStart.value), d2=new Date(dateEnd.value);
+    const diffDays=Math.round((d2-d1)/86400000);
+    document.getElementById('diffResult').textContent=Math.abs(diffDays)+' days';
+    const weeks=Math.floor(Math.abs(diffDays)/7);
+    document.getElementById('diffSub').textContent = diffDays<0 ? `start date is after end date · ~${weeks} weeks` : `that's about ${weeks} weeks`;
+  }
+  dateStart.addEventListener('input',updateDiff); dateEnd.addEventListener('input',updateDiff);
+
+  const baseDate=document.getElementById('baseDate'), daysAmount=document.getElementById('daysAmount'), addSubMode=document.getElementById('addSubMode');
+  function updateAddSub(){
+    if(!baseDate.value||daysAmount.value===''){ document.getElementById('addSubResult').textContent='—'; document.getElementById('addSubSub').textContent=''; return; }
+    const d=new Date(baseDate.value); const amount=parseInt(daysAmount.value,10)||0; const sign=addSubMode.value==='add'?1:-1;
+    d.setDate(d.getDate()+sign*amount);
+    document.getElementById('addSubResult').textContent=d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    document.getElementById('addSubSub').textContent=`${sign>0?'plus':'minus'} ${amount} days from base date`;
+  }
+  baseDate.addEventListener('input',updateAddSub); daysAmount.addEventListener('input',updateAddSub); addSubMode.addEventListener('change',updateAddSub);
+
+  const birthDate=document.getElementById('birthDate');
+  function updateAge(){
+    if(!birthDate.value){ document.getElementById('ageResult').textContent='—'; document.getElementById('ageSub').textContent=''; return; }
+    const birth=new Date(birthDate.value), today=new Date();
+    if(birth>today){ document.getElementById('ageResult').textContent='date in the future'; return; }
+    let years=today.getFullYear()-birth.getFullYear(), months=today.getMonth()-birth.getMonth(), days=today.getDate()-birth.getDate();
+    if(days<0){ months--; const lastMonth=new Date(today.getFullYear(),today.getMonth(),0); days+=lastMonth.getDate(); }
+    if(months<0){ years--; months+=12; }
+    document.getElementById('ageResult').textContent=`${years}y, ${months}m, ${days}d`;
+    const totalDays=Math.round((today-birth)/86400000);
+    document.getElementById('ageSub').textContent=`that's ${totalDays.toLocaleString('en-US')} days total`;
+  }
+  birthDate.addEventListener('input',updateAge);
+  const todayStr=new Date().toISOString().split('T')[0]; dateStart.value=todayStr; baseDate.value=todayStr;
+  updateDiff(); updateAddSub();
+</script>
+</body>
+</html>

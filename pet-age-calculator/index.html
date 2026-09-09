@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dog & Cat Age Calculator — Human Years</title>
+<meta name="description" content="Find out how old your dog or cat is in human years. Free, fun calculator based on veterinary aging research.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#2e2013; --surface:#3d2b19; --line:#553c22; --paper:#f6ecdd; --muted:#bb9e75; --accent:#e2a33f; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:520px; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:28px; }
+  .species-row{ display:flex; gap:8px; margin-bottom:20px; }
+  .species-btn{ flex:1; padding:12px; background:var(--ink); border:1px solid var(--line); border-radius:6px; color:var(--muted); font-size:14px; cursor:pointer; }
+  .species-btn.active{ background:var(--accent); border-color:var(--accent); color:var(--ink); font-weight:600; }
+  .field{ margin-bottom:20px; }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); margin-bottom:8px; }
+  input[type="number"]{ width:100%; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:14px 16px; font-family:'IBM Plex Mono',monospace; font-size:17px; color:var(--paper); outline:none; }
+  .result-box{ margin-top:8px; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:26px; text-align:center; }
+  .result-value{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:34px; color:var(--accent); }
+  .result-sub{ font-size:13px; color:var(--muted); margin-top:8px; }
+  footer{ margin-top:48px; color:#5c4a2e; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#5c4a2e; }
+  .content{ width:100%; max-width:600px; margin-top:64px; padding-top:48px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:22px; margin:40px 0 14px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#dcc7a3; font-size:15px; line-height:1.75; margin:0 0 14px; }
+  .faq-item{ margin-bottom:20px; }
+  .faq-item h3{ font-weight:600; font-size:15px; margin:0 0 8px; }
+  .faq-item p{ margin:0; font-size:14.5px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / pets</div>
+  <h1>Dog & Cat Age in Human Years</h1>
+  <p class="sub">Find out how old your pet would be if they were human.</p>
+
+  <div class="card">
+    <div class="species-row">
+      <button class="species-btn active" data-species="dog">🐕 Dog</button>
+      <button class="species-btn" data-species="cat">🐈 Cat</button>
+    </div>
+    <div class="field"><label>PET'S AGE (YEARS)</label><input type="number" id="petAge" value="3" min="0" step="0.5"></div>
+    <div class="result-box"><div class="result-value" id="humanAge">—</div><div class="result-sub">in human years</div></div>
+  </div>
+
+  <section class="content">
+    <h2>Why it's not just "times 7"</h2>
+    <p>The old rule of "1 dog year = 7 human years" is a big oversimplification. In reality, pets mature much faster early on — a one-year-old dog is already fully grown, roughly equivalent to a human in their late teens or early twenties — and aging slows down in later years compared to a flat multiplication.</p>
+    <h2>How the result is calculated</h2>
+    <p>This calculator uses an approximate aging curve based on veterinary research: the first year of life equals about 15 human years, the second year adds roughly 9 more, and each following year adds about 4-5 human years, with a slight difference between dogs and cats.</p>
+    <div class="faq-item"><h3>Does breed affect the result?</h3><p>Yes, in reality — smaller dog breeds tend to live longer and age slower than large breeds. This calculator shows an average value regardless of breed.</p></div>
+    <div class="faq-item"><h3>Is this a health indicator?</h3><p>No — it's a fun approximation, not a substitute for veterinary assessment, which accounts for breed, weight, and individual health.</p></div>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  let species='dog';
+  document.querySelectorAll('.species-btn').forEach(btn=>btn.addEventListener('click',()=>{ document.querySelectorAll('.species-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); species=btn.dataset.species; calc(); }));
+  const petAge=document.getElementById('petAge'), humanAge=document.getElementById('humanAge');
+  function calc(){
+    const age=parseFloat(petAge.value); if(!age||age<0){ humanAge.textContent='—'; return; }
+    let result;
+    if(age<=1){ result=age*15; } else if(age<=2){ result=15+(age-1)*9; } else { const perYear=species==='dog'?5:4; result=24+(age-2)*perYear; }
+    humanAge.textContent=Math.round(result)+' years';
+  }
+  petAge.addEventListener('input',calc); calc();
+</script>
+</body>
+</html>

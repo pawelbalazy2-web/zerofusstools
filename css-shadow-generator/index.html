@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Box-Shadow Generator — Free Online</title>
+<meta name="description" content="Create CSS box-shadow effects visually and copy the code. Free tool for developers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --bg:#eef0f4; --surface:#ffffff; --ink:#1d1f24; --line:#dde0e6; --muted:#6b7280; --accent:#6366f1; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:560px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+  .preview-wrap{ height:180px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
+  .preview{ width:120px; height:120px; background:#fff; border-radius:12px; }
+  .field{ margin-bottom:12px; }
+  .field label{ display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); margin-bottom:6px; }
+  input[type="range"]{ width:100%; }
+  input[type="color"]{ width:56px; height:36px; border:1px solid var(--line); border-radius:6px; }
+  code{ display:block; background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:14px; font-family:'IBM Plex Mono',monospace; font-size:13px; word-break:break-all; margin-top:14px; }
+  .copy-btn{ margin-top:12px; width:100%; background:var(--accent); color:#fff; border:none; font-family:'Sora',sans-serif; font-weight:700; font-size:14px; padding:12px; border-radius:6px; cursor:pointer; }
+  footer{ margin-top:48px; color:#9a9fac; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#9a9fac; }
+  .content{ width:100%; max-width:560px; margin-top:56px; padding-top:44px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Sora',sans-serif; font-weight:700; font-size:20px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#4b5160; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / design</div>
+  <h1>CSS Box-Shadow Generator</h1>
+  <p class="sub">Set your shadow parameters and copy the code.</p>
+
+  <div class="card">
+    <div class="preview-wrap"><div class="preview" id="preview"></div></div>
+    <div class="field"><label>OFFSET X <span id="xVal">10px</span></label><input type="range" id="x" min="-50" max="50" value="10"></div>
+    <div class="field"><label>OFFSET Y <span id="yVal">10px</span></label><input type="range" id="y" min="-50" max="50" value="10"></div>
+    <div class="field"><label>BLUR <span id="blurVal">20px</span></label><input type="range" id="blur" min="0" max="100" value="20"></div>
+    <div class="field"><label>SPREAD <span id="spreadVal">0px</span></label><input type="range" id="spread" min="-30" max="30" value="0"></div>
+    <div class="field"><label>COLOR & OPACITY <span id="opacityVal">25%</span></label>
+      <div style="display:flex;gap:10px;align-items:center;"><input type="color" id="shadowColor" value="#000000"><input type="range" id="opacity" min="0" max="100" value="25" style="flex:1;"></div>
+    </div>
+    <code id="cssCode"></code>
+    <button class="copy-btn" id="copyBtn">Copy CSS</button>
+  </div>
+
+  <section class="content">
+    <h2>How box-shadow works</h2>
+    <p>The CSS box-shadow property takes four key values: horizontal and vertical offset (where the shadow falls), blur (how soft the edges are), and spread (how far the shadow extends beyond the element). Subtle, low-opacity shadows create a modern sense of depth popular in current UI design.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const ids=['x','y','blur','spread','opacity']; const els={}; ids.forEach(id=>els[id]=document.getElementById(id));
+  const shadowColor=document.getElementById('shadowColor'), preview=document.getElementById('preview'), cssCode=document.getElementById('cssCode');
+  function hexToRgb(hex){ const num=parseInt(hex.replace('#',''),16); return [(num>>16)&255,(num>>8)&255,num&255]; }
+  function update(){
+    document.getElementById('xVal').textContent=els.x.value+'px'; document.getElementById('yVal').textContent=els.y.value+'px';
+    document.getElementById('blurVal').textContent=els.blur.value+'px'; document.getElementById('spreadVal').textContent=els.spread.value+'px'; document.getElementById('opacityVal').textContent=els.opacity.value+'%';
+    const [r,g,b]=hexToRgb(shadowColor.value); const alpha=els.opacity.value/100;
+    const shadow=`${els.x.value}px ${els.y.value}px ${els.blur.value}px ${els.spread.value}px rgba(${r},${g},${b},${alpha})`;
+    preview.style.boxShadow=shadow; cssCode.textContent=`box-shadow: ${shadow};`;
+  }
+  [...ids.map(id=>els[id]),shadowColor].forEach(el=>el.addEventListener('input',update));
+  document.getElementById('copyBtn').addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(cssCode.textContent); }catch(e){} });
+  update();
+</script>
+</body>
+</html>

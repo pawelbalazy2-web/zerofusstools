@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Days Calculator — Weekdays Between Dates</title>
+<meta name="description" content="Calculate the number of business days (weekdays) between two dates. Free online tool.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#1a1530; --surface:#241d42; --line:#3a3163; --paper:#ece7f7; --muted:#9084b5; --accent:#8b5cf6; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:480px; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:28px; }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); margin-bottom:8px; }
+  input[type="date"]{ width:100%; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:14px; font-family:'IBM Plex Mono',monospace; font-size:16px; color:var(--paper); outline:none; color-scheme:dark; }
+  .result-box{ margin-top:8px; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:24px; text-align:center; }
+  .result-value{ font-family:'Sora',sans-serif; font-weight:800; font-size:34px; color:var(--accent); }
+  .result-sub{ font-size:13px; color:var(--muted); margin-top:6px; }
+  footer{ margin-top:48px; color:#4a3d70; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#4a3d70; }
+  .content{ width:100%; max-width:480px; margin-top:56px; padding-top:44px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Sora',sans-serif; font-weight:700; font-size:20px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#c9c3e3; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / work</div>
+  <h1>Business Days Calculator</h1>
+  <p class="sub">Count weekdays (Mon-Fri) between two dates, excluding weekends.</p>
+
+  <div class="card">
+    <div class="field"><label>START DATE</label><input type="date" id="dateStart"></div>
+    <div class="field"><label>END DATE</label><input type="date" id="dateEnd"></div>
+    <div class="result-box"><div class="result-value" id="result">—</div><div class="result-sub" id="resultSub"></div></div>
+  </div>
+
+  <section class="content">
+    <h2>Why business days matter</h2>
+    <p>Many deadlines — delivery times, response windows, payment processing — are counted in business days, not calendar days. This tool automatically skips Saturdays and Sundays to give you the exact number of working days between two dates.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const dateStart=document.getElementById('dateStart'), dateEnd=document.getElementById('dateEnd');
+  function calc(){
+    if(!dateStart.value||!dateEnd.value) return;
+    let d1=new Date(dateStart.value), d2=new Date(dateEnd.value);
+    if(d1>d2) [d1,d2]=[d2,d1];
+    let count=0, cur=new Date(d1);
+    while(cur<=d2){ const day=cur.getDay(); if(day!==0&&day!==6) count++; cur.setDate(cur.getDate()+1); }
+    document.getElementById('result').textContent=count+' days';
+    document.getElementById('resultSub').textContent='business days (excluding weekends)';
+  }
+  dateStart.addEventListener('input',calc); dateEnd.addEventListener('input',calc);
+  const today=new Date().toISOString().split('T')[0]; dateStart.value=today;
+  const future=new Date(); future.setDate(future.getDate()+30); dateEnd.value=future.toISOString().split('T')[0];
+  calc();
+</script>
+</body>
+</html>

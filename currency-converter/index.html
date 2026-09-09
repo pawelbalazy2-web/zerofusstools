@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Currency Converter — Online, Free</title>
+<meta name="description" content="Convert amounts between currencies using your own exchange rate. Free, no signup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#0f2418; --surface:#16321f; --line:#264a2f; --paper:#e9f5ec; --muted:#7fa88c; --accent:#2ecc71; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:520px; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:28px; }
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); margin-bottom:8px; }
+  .field-row{ display:flex; gap:10px; }
+  input[type="text"], input[type="number"]{ background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:13px 14px; font-family:'IBM Plex Mono',monospace; font-size:16px; color:var(--paper); outline:none; }
+  .rate-row{ display:flex; align-items:center; gap:10px; }
+  .result-box{ margin-top:16px; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:22px; text-align:center; }
+  .result-value{ font-family:'Sora',sans-serif; font-weight:800; font-size:26px; color:var(--accent); }
+  .disclaimer{ margin-top:18px; font-size:12px; color:var(--muted); text-align:center; line-height:1.6; }
+  footer{ margin-top:48px; color:#3d5c46; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#3d5c46; }
+  .content{ width:100%; max-width:520px; margin-top:56px; padding-top:44px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Sora',sans-serif; font-weight:700; font-size:20px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#b9d5c2; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / finance</div>
+  <h1>Currency Converter</h1>
+  <p class="sub">Enter today's exchange rate (check your bank or a currency site), and this tool converts the amount.</p>
+
+  <div class="card">
+    <div class="field"><label>AMOUNT</label>
+      <div class="field-row"><input type="text" id="amount" value="100" style="flex:2;"><input type="text" id="fromCur" value="EUR" maxlength="3" style="flex:1;text-transform:uppercase;"></div>
+    </div>
+    <div class="field"><label>EXCHANGE RATE (1 [FROM] = X [TO])</label>
+      <div class="rate-row"><input type="number" id="rate" value="1.09" step="0.0001" style="flex:1;"><input type="text" id="toCur" value="USD" maxlength="3" style="width:80px;text-transform:uppercase;"></div>
+    </div>
+    <div class="result-box"><div class="result-value" id="resultValue">—</div></div>
+    <p class="disclaimer">This tool doesn't auto-fetch live rates — rates change daily. Check your bank or a currency site and enter it manually above.</p>
+  </div>
+
+  <section class="content">
+    <h2>Why no automatic rate?</h2>
+    <p>Exchange rates change in real time, and different providers (banks, exchange offices, card networks) apply different margins. Instead of showing a rate that might be stale or wrong for your specific transaction, this tool lets you enter exactly the rate you see from your provider.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  function calc(){
+    const amount=parseFloat(document.getElementById('amount').value.replace(',','.'));
+    const rate=parseFloat(document.getElementById('rate').value);
+    const fromCur=document.getElementById('fromCur').value.toUpperCase()||'???';
+    const toCur=document.getElementById('toCur').value.toUpperCase()||'???';
+    const resultValue=document.getElementById('resultValue');
+    if(!amount||!rate){ resultValue.textContent='—'; return; }
+    const result=amount*rate;
+    resultValue.textContent=`${amount} ${fromCur} = ${result.toLocaleString('en-US',{maximumFractionDigits:2})} ${toCur}`;
+  }
+  ['amount','rate','fromCur','toCur'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
+  calc();
+</script>
+</body>
+</html>

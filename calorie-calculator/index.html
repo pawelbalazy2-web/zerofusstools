@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calorie Calculator — Daily Calorie Needs (BMR & TDEE)</title>
+<meta name="description" content="Free calorie calculator. Estimate your daily calorie needs (BMR and TDEE) based on age, weight, height, and activity level.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#2a1a12; --surface:#382418; --line:#4d3524; --paper:#f5ebe0; --muted:#b3927a; --accent:#ef6c4d; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:540px; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:28px; }
+  .gender-row{ display:flex; gap:8px; margin-bottom:18px; }
+  .gender-btn{ flex:1; padding:11px; background:var(--ink); border:1px solid var(--line); border-radius:6px; color:var(--muted); cursor:pointer; }
+  .gender-btn.active{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); margin-bottom:8px; }
+  input[type="number"], select{ width:100%; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:13px 14px; font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--paper); outline:none; }
+  select{ font-family:'Inter',sans-serif; cursor:pointer; }
+  .results{ margin-top:8px; }
+  .result-row{ display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px dashed var(--line); }
+  .result-row .label{ font-size:13.5px; color:var(--muted); }
+  .result-row .value{ font-family:'IBM Plex Mono',monospace; font-size:16px; }
+  .result-row.highlight .value{ font-size:24px; font-weight:700; color:var(--accent); }
+  .disclaimer{ margin-top:20px; font-size:12px; color:var(--muted); text-align:center; }
+  footer{ margin-top:48px; color:#5c4433; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#5c4433; }
+  .content{ width:100%; max-width:600px; margin-top:64px; padding-top:48px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Sora',sans-serif; font-weight:700; font-size:22px; margin:40px 0 14px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#d9c4b4; font-size:15px; line-height:1.75; margin:0 0 14px; }
+  .faq-item{ margin-bottom:20px; }
+  .faq-item h3{ font-weight:600; font-size:15px; margin:0 0 8px; }
+  .faq-item p{ margin:0; font-size:14.5px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / health</div>
+  <h1>Daily Calorie Needs</h1>
+  <p class="sub">Estimate your daily calorie needs based on your stats.</p>
+
+  <div class="card">
+    <div class="gender-row"><button class="gender-btn active" data-gender="male">Male</button><button class="gender-btn" data-gender="female">Female</button></div>
+    <div class="row2">
+      <div class="field"><label>AGE</label><input type="number" id="age" value="30"></div>
+      <div class="field"><label>WEIGHT (KG)</label><input type="number" id="weight" value="75"></div>
+    </div>
+    <div class="field"><label>HEIGHT (CM)</label><input type="number" id="height" value="175"></div>
+    <div class="field"><label>ACTIVITY LEVEL</label>
+      <select id="activity">
+        <option value="1.2">Sedentary</option>
+        <option value="1.375">Light activity (1-3x/week)</option>
+        <option value="1.55" selected>Moderate activity (3-5x/week)</option>
+        <option value="1.725">High activity (6-7x/week)</option>
+        <option value="1.9">Very high (physical job + training)</option>
+      </select>
+    </div>
+    <div class="results">
+      <div class="result-row"><span class="label">Basal Metabolic Rate (BMR)</span><span class="value" id="bmrResult">—</span></div>
+      <div class="result-row highlight"><span class="label">Estimated daily calories</span><span class="value" id="tdeeResult">—</span></div>
+    </div>
+    <p class="disclaimer">Estimate only (Mifflin-St Jeor formula), not medical or dietary advice.</p>
+  </div>
+
+  <section class="content">
+    <h2>What BMR and TDEE mean</h2>
+    <p>BMR (Basal Metabolic Rate) is the number of calories your body burns at complete rest, just to keep basic functions running. TDEE (Total Daily Energy Expenditure) adds your activity level on top — it's the number closer to your actual daily calorie needs.</p>
+    <h2>How to use the result</h2>
+    <p>Treat TDEE as a starting reference point, not a strict rule. It's a useful baseline for a conversation with a nutritionist or doctor, especially before making significant changes to your diet.</p>
+    <div class="faq-item"><h3>Is this result exact?</h3><p>It's a statistical estimate — actual needs vary with genetics, body composition, and health status, so real values can differ.</p></div>
+    <div class="faq-item"><h3>Is my data stored anywhere?</h3><p>No — all calculations happen locally in your browser.</p></div>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  let gender='male';
+  document.querySelectorAll('.gender-btn').forEach(btn=>btn.addEventListener('click',()=>{ document.querySelectorAll('.gender-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); gender=btn.dataset.gender; calc(); }));
+  const age=document.getElementById('age'), weight=document.getElementById('weight'), height=document.getElementById('height'), activity=document.getElementById('activity');
+  function calc(){
+    const a=parseFloat(age.value), w=parseFloat(weight.value), h=parseFloat(height.value);
+    if(!a||!w||!h){ document.getElementById('bmrResult').textContent='—'; document.getElementById('tdeeResult').textContent='—'; return; }
+    let bmr = gender==='male' ? (10*w+6.25*h-5*a+5) : (10*w+6.25*h-5*a-161);
+    const tdee = bmr*parseFloat(activity.value);
+    document.getElementById('bmrResult').textContent=Math.round(bmr)+' kcal';
+    document.getElementById('tdeeResult').textContent=Math.round(tdee)+' kcal';
+  }
+  [age,weight,height,activity].forEach(el=>el.addEventListener('input',calc));
+  calc();
+</script>
+</body>
+</html>

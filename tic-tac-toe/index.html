@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic-Tac-Toe Online — Free 2-Player Game</title>
+<meta name="description" content="Play tic-tac-toe online for two players on one device. Free, no signup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#1a1633; --surface:#241f42; --line:#372f5e; --paper:#f2eefc; --muted:#a99fd4; --pink:#ff3f8e; --teal:#35d0ba; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:56px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--pink); margin-bottom:14px; }
+  h1{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:420px; font-size:15px; margin:0 0 32px; }
+  .status{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:18px; margin-bottom:20px; min-height:26px; }
+  .board{ display:grid; grid-template-columns:repeat(3,90px); grid-template-rows:repeat(3,90px); gap:6px; background:var(--line); padding:6px; border-radius:10px; }
+  .cell{ background:var(--surface); display:flex; align-items:center; justify-content:center; font-family:'Fredoka',sans-serif; font-weight:700; font-size:42px; cursor:pointer; border-radius:6px; user-select:none; }
+  .cell.x{ color:var(--pink); } .cell.o{ color:var(--teal); }
+  .reset-btn{ margin-top:24px; background:var(--pink); color:#fff; border:none; font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; padding:12px 28px; border-radius:24px; cursor:pointer; }
+  footer{ margin-top:56px; color:#4d4478; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#4d4478; }
+  .content{ width:100%; max-width:520px; margin-top:56px; padding-top:40px; border-top:1px solid var(--line); text-align:center; }
+  .content h2{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:19px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#c9c3e3; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">game / classic</div>
+  <h1>Tic-Tac-Toe</h1>
+  <p class="sub">Two players, one device.</p>
+  <div class="status" id="status">X's turn</div>
+  <div class="board" id="board"></div>
+  <button class="reset-btn" id="resetBtn">New game</button>
+
+  <section class="content">
+    <h2>Rules</h2>
+    <p>Players alternate placing their mark (X or O) in an empty cell of the 3×3 grid. The first to line up three of their marks — horizontally, vertically, or diagonally — wins. If all cells fill without a winner, it's a draw.</p>
+    <p>With perfect play from both sides, tic-tac-toe always ends in a draw — winning requires a mistake from your opponent.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const boardEl=document.getElementById('board'), statusEl=document.getElementById('status');
+  let board=Array(9).fill(null), current='X', gameOver=false;
+  const WINS=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  function render(){ boardEl.innerHTML=''; board.forEach((val,i)=>{ const cell=document.createElement('div'); cell.className='cell'+(val?' '+val.toLowerCase():''); cell.textContent=val||''; cell.addEventListener('click',()=>makeMove(i)); boardEl.appendChild(cell); }); }
+  function checkWinner(){ for(const [a,b,c] of WINS){ if(board[a]&&board[a]===board[b]&&board[a]===board[c]) return board[a]; } if(board.every(c=>c!==null)) return 'draw'; return null; }
+  function makeMove(i){ if(gameOver||board[i]) return; board[i]=current; render();
+    const winner=checkWinner();
+    if(winner==='draw'){ statusEl.textContent="It's a draw!"; gameOver=true; }
+    else if(winner){ statusEl.textContent=`Player ${winner} wins! 🎉`; gameOver=true; }
+    else{ current=current==='X'?'O':'X'; statusEl.textContent=current+"'s turn"; }
+  }
+  document.getElementById('resetBtn').addEventListener('click',()=>{ board=Array(9).fill(null); current='X'; gameOver=false; statusEl.textContent="X's turn"; render(); });
+  render();
+</script>
+</body>
+</html>

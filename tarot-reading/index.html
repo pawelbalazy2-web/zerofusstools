@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarot Reading Online — Free Card Draw</title>
+<meta name="description" content="Free online tarot reading. Draw a card of the day or a three-card past-present-future spread.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#161329; --surface:#201c38; --line:#362f57; --paper:#ece8f7; --muted:#9089b8; --gold:#d4a574; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--gold); margin-bottom:14px; }
+  h1{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(34px,5.5vw,50px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 32px; font-style:italic; }
+  .mode-tabs{ display:flex; gap:8px; margin-bottom:24px; }
+  .mode-btn{ background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:10px 20px; color:var(--muted); font-size:13.5px; cursor:pointer; }
+  .mode-btn.active{ background:var(--gold); border-color:var(--gold); color:var(--ink); }
+  .draw-btn{ background:var(--gold); color:var(--ink); border:none; font-family:'Cormorant Garamond',serif; font-weight:700; font-size:17px; padding:14px 32px; border-radius:26px; cursor:pointer; margin-bottom:30px; }
+  .cards-area{ display:flex; gap:20px; flex-wrap:wrap; justify-content:center; max-width:700px; }
+  .card-item{ width:150px; }
+  .card-visual{ width:150px; height:220px; background:var(--surface); border:2px solid #a97f52; border-radius:10px; display:flex; align-items:center; justify-content:center; text-align:center; padding:14px; margin-bottom:10px; }
+  .card-name{ font-family:'Cormorant Garamond',serif; font-weight:700; font-size:18px; color:var(--gold); }
+  .card-label{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:14px; text-align:center; }
+  .card-meaning{ font-size:12.5px; color:#d3cdea; line-height:1.6; text-align:center; padding:0 4px; }
+  footer{ margin-top:56px; color:#4a4270; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#4a4270; }
+  .content{ width:100%; max-width:600px; margin-top:56px; padding-top:44px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:24px; margin:32px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#c3bce0; font-size:15px; line-height:1.75; margin:0 0 14px; }
+  .disclaimer{ margin-top:20px; font-size:12px; color:var(--muted); text-align:center; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">reading / tarot</div>
+  <h1>Tarot Reading</h1>
+  <p class="sub">Focus on your question and draw a card.</p>
+
+  <div class="mode-tabs">
+    <button class="mode-btn active" data-mode="1">Card of the day</button>
+    <button class="mode-btn" data-mode="3">Past · Present · Future</button>
+  </div>
+  <button class="draw-btn" id="drawBtn">Draw cards</button>
+  <div class="cards-area" id="cardsArea"></div>
+
+  <section class="content">
+    <h2>What tarot is</h2>
+    <p>Tarot is a 78-card deck used for centuries as a tool for reflection. This tool draws from the 22 Major Arcana — the most recognizable part of the deck, representing core archetypes and stages of human experience, from The Fool (new beginnings) to The World (fulfillment).</p>
+    <h2>Reading the three-card spread</h2>
+    <p>Past-Present-Future is one of the most popular spreads — the first card shows influences from the past, the second your current situation, and the third a possible direction ahead.</p>
+    <p class="disclaimer">Tarot is symbolic and for entertainment — it doesn't predict the future or replace professional advice.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const CARDS=[
+    {n:"The Fool",m:"New beginnings, spontaneity, and readiness for the unknown. Trust your intuition even if the path isn't clear yet."},
+    {n:"The Magician",m:"You have the tools you need. A card of initiative, skill, and turning ideas into reality."},
+    {n:"The High Priestess",m:"Intuition and inner knowledge. A time for reflection over action."},
+    {n:"The Empress",m:"Abundance, creativity, and nurturing growth — of a project, relationship, or yourself."},
+    {n:"The Emperor",m:"Structure, authority, stability. Time to organize and take responsibility."},
+    {n:"The Hierophant",m:"Tradition, learning, and finding meaning in tried paths. May point to a mentor."},
+    {n:"The Lovers",m:"Choice, connection, and the values guiding you. Often symbolizes an important decision, not just romance."},
+    {n:"The Chariot",m:"Determination and victory through willpower. Time to push forward despite obstacles."},
+    {n:"Strength",m:"Inner strength, patience, and gently but effectively handling difficulty."},
+    {n:"The Hermit",m:"Introspection and seeking answers in solitude. Time to step back and reflect."},
+    {n:"Wheel of Fortune",m:"Change, cycles, and what's beyond your control. A reminder that difficult periods pass."},
+    {n:"Justice",m:"Balance, truth, and consequences of your choices. Time for honest assessment."},
+    {n:"The Hanged Man",m:"Suspension, new perspective, and acceptance of what you can't control."},
+    {n:"Death",m:"Symbolic ending and transformation, not literal death. Something ends to make room for something new."},
+    {n:"Temperance",m:"Harmony, patience, and blending opposites. Finding the middle ground."},
+    {n:"The Devil",m:"Limitations or patterns that are hard to break free from. An invitation to examine what binds you."},
+    {n:"The Tower",m:"Sudden, disruptive change that exposes what was unstable. Often clears the way for something more real."},
+    {n:"The Star",m:"Hope, healing, and faith in a better future after a hard period."},
+    {n:"The Moon",m:"Uncertainty, illusion, and subconscious fears. Don't trust first impressions blindly."},
+    {n:"The Sun",m:"Joy, success, and clarity. One of the most positive cards in the deck."},
+    {n:"Judgement",m:"Awakening, reckoning, and a chance for renewal. Time to look back and learn."},
+    {n:"The World",m:"Fulfillment, completion, and wholeness. Achieving a goal you've worked toward."}
+  ];
+  const LABELS_1=['Card of the day'], LABELS_3=['Past','Present','Future'];
+  let mode=1;
+  document.querySelectorAll('.mode-btn').forEach(btn=>btn.addEventListener('click',()=>{ document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); mode=parseInt(btn.dataset.mode,10); document.getElementById('cardsArea').innerHTML=''; }));
+  function drawCards(){
+    const shuffled=[...CARDS]; for(let i=shuffled.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; }
+    const drawn=shuffled.slice(0,mode); const labels=mode===1?LABELS_1:LABELS_3;
+    document.getElementById('cardsArea').innerHTML = drawn.map((card,i)=>`
+      <div class="card-item"><div class="card-visual"><div class="card-name">${card.n}</div></div><div class="card-label">${labels[i]}</div><div class="card-meaning">${card.m}</div></div>
+    `).join('');
+  }
+  document.getElementById('drawBtn').addEventListener('click',drawCards);
+</script>
+</body>
+</html>

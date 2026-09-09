@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meme Generator — Free Online, No Signup</title>
+<meta name="description" content="Free meme generator. Upload your own image, add top and bottom text, and download your meme instantly.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --paper:#f5f4f0; --surface:#ffffff; --ink:#141414; --line:#dedad0; --muted:#6b675e; --red:#e63946; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--red); margin-bottom:14px; }
+  h1{ font-family:'Archivo',sans-serif; font-weight:700; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 32px; }
+  .card{ width:100%; max-width:560px; background:var(--surface); border:2px solid var(--ink); border-radius:4px; padding:24px; }
+  .drop-zone{ border:2px dashed var(--line); border-radius:8px; padding:30px 20px; text-align:center; cursor:pointer; color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .drop-zone:hover{ border-color:var(--red); }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:6px; }
+  input[type="text"]{ width:100%; background:var(--paper); border:1.5px solid var(--line); border-radius:4px; padding:11px 12px; font-size:14px; color:var(--ink); outline:none; text-transform:uppercase; }
+  canvas{ max-width:100%; border-radius:4px; margin-top:6px; display:block; }
+  .download-btn{ width:100%; margin-top:16px; background:var(--red); color:#fff; border:none; font-family:'Archivo',sans-serif; font-weight:700; font-size:15px; padding:14px; border-radius:4px; cursor:pointer; }
+  footer{ margin-top:48px; color:#a8a498; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#a8a498; }
+  .content{ width:100%; max-width:600px; margin-top:56px; padding-top:40px; border-top:1.5px dashed var(--line); }
+  .content h2{ font-family:'Archivo',sans-serif; font-weight:700; font-size:20px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#4a473f; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / fun</div>
+  <h1>Meme Generator</h1>
+  <p class="sub">Upload your own image, add text, download your meme.</p>
+
+  <div class="card">
+    <div class="drop-zone" id="dropZone">Click to choose an image</div>
+    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+    <div class="field"><label>TOP TEXT</label><input type="text" id="topText" value="WHEN YOU THINK"></div>
+    <div class="field"><label>BOTTOM TEXT</label><input type="text" id="bottomText" value="THE WORK IS FINALLY DONE"></div>
+    <canvas id="memeCanvas" style="display:none;"></canvas>
+    <button class="download-btn" id="downloadBtn" style="display:none;">Download meme</button>
+  </div>
+
+  <section class="content">
+    <h2>How to use it</h2>
+    <p>Upload your own image (a photo, a screenshot, anything), type top and bottom text in the classic meme style, and the tool adds it in bold, outlined text automatically. Everything happens locally in your browser — the image is never uploaded anywhere.</p>
+    <p><strong>Copyright note:</strong> only use images you own or have rights to — this tool doesn't provide ready-made templates featuring copyrighted characters.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const dropZone=document.getElementById('dropZone'), fileInput=document.getElementById('fileInput'), canvas=document.getElementById('memeCanvas'), ctx=canvas.getContext('2d'), topText=document.getElementById('topText'), bottomText=document.getElementById('bottomText'), downloadBtn=document.getElementById('downloadBtn');
+  let img=new Image();
+  dropZone.addEventListener('click',()=>fileInput.click());
+  fileInput.addEventListener('change',()=>{ if(fileInput.files[0]) loadImage(fileInput.files[0]); });
+  function loadImage(file){ const reader=new FileReader(); reader.onload=e=>{ img=new Image(); img.onload=()=>{ drawMeme(); canvas.style.display='block'; downloadBtn.style.display='block'; }; img.src=e.target.result; }; reader.readAsDataURL(file); }
+  function wrapText(text,maxWidth){ const words=text.split(' '); const lines=[]; let line=''; words.forEach(word=>{ const test=line?line+' '+word:word; if(ctx.measureText(test).width>maxWidth&&line){ lines.push(line); line=word; } else { line=test; } }); if(line) lines.push(line); return lines; }
+  function drawMeme(){
+    const maxW=600; const scale=Math.min(1,maxW/img.width);
+    canvas.width=img.width*scale; canvas.height=img.height*scale;
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    const fontSize=Math.floor(canvas.width/12);
+    ctx.font=`bold ${fontSize}px Archivo, Impact, sans-serif`; ctx.textAlign='center'; ctx.fillStyle='#fff'; ctx.strokeStyle='#000'; ctx.lineWidth=fontSize/12;
+    const topLines=wrapText(topText.value.toUpperCase(),canvas.width-20);
+    topLines.forEach((line,i)=>{ const y=fontSize*(i+1)+10; ctx.strokeText(line,canvas.width/2,y); ctx.fillText(line,canvas.width/2,y); });
+    const bottomLines=wrapText(bottomText.value.toUpperCase(),canvas.width-20);
+    bottomLines.reverse().forEach((line,i)=>{ const y=canvas.height-20-(fontSize*i); ctx.strokeText(line,canvas.width/2,y); ctx.fillText(line,canvas.width/2,y); });
+  }
+  [topText,bottomText].forEach(el=>el.addEventListener('input',()=>{ if(img.src) drawMeme(); }));
+  downloadBtn.addEventListener('click',()=>{ const link=document.createElement('a'); link.download='meme.png'; link.href=canvas.toDataURL('image/png'); link.click(); });
+</script>
+</body>
+</html>

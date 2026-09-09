@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morse Code Translator — Free Online</title>
+<meta name="description" content="Translate text to Morse code and back. Free online converter, no signup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#0e2a30; --surface:#153740; --line:#204b56; --paper:#e6f4f6; --muted:#7fa8b0; --accent:#06b6d4; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:600px; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:28px; }
+  .tabs{ display:flex; gap:4px; margin-bottom:20px; background:var(--ink); padding:4px; border-radius:6px; }
+  .tab{ flex:1; text-align:center; padding:10px; font-size:13.5px; font-weight:500; color:var(--muted); background:transparent; border:none; border-radius:4px; cursor:pointer; }
+  .tab.active{ background:var(--accent); color:var(--ink); }
+  textarea{ width:100%; min-height:120px; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:16px; font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--paper); outline:none; resize:vertical; margin-bottom:8px; }
+  .arrow{ text-align:center; color:var(--accent); font-size:20px; margin:6px 0; }
+  .copy-btn{ margin-top:10px; background:var(--ink); border:1px solid var(--line); color:var(--muted); font-size:13px; padding:9px 16px; border-radius:6px; cursor:pointer; }
+  footer{ margin-top:48px; color:#3f5f66; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#3f5f66; }
+  .content{ width:100%; max-width:600px; margin-top:56px; padding-top:44px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Sora',sans-serif; font-weight:700; font-size:20px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#b9d5da; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / conversion</div>
+  <h1>Morse Code Translator</h1>
+  <p class="sub">Translate text to Morse code and back.</p>
+
+  <div class="card">
+    <div class="tabs"><button class="tab active" data-mode="encode">Text → Morse</button><button class="tab" data-mode="decode">Morse → Text</button></div>
+    <textarea id="inputText" placeholder="Type text..."></textarea>
+    <div class="arrow">↓</div>
+    <textarea id="outputText" placeholder="Result..." readonly></textarea>
+    <button class="copy-btn" id="copyBtn">Copy result</button>
+  </div>
+
+  <section class="content">
+    <h2>A brief history of Morse code</h2>
+    <p>Morse code was developed in the 1830s-40s for telegraph communication — each letter and number is represented by a sequence of short and long signals (dots and dashes). Though telegraphs are long obsolete, Morse code is still used in amateur radio, aviation, and emergency signaling (SOS being the most recognizable Morse signal).</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const MORSE={A:'.-',B:'-...',C:'-.-.',D:'-..',E:'.',F:'..-.',G:'--.',H:'....',I:'..',J:'.---',K:'-.-',L:'.-..',M:'--',N:'-.',O:'---',P:'.--.',Q:'--.-',R:'.-.',S:'...',T:'-',U:'..-',V:'...-',W:'.--',X:'-..-',Y:'-.--',Z:'--..','0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.'};
+  const REVERSE_MORSE=Object.fromEntries(Object.entries(MORSE).map(([k,v])=>[v,k]));
+  let mode='encode';
+  const tabs=document.querySelectorAll('.tab'), inputText=document.getElementById('inputText'), outputText=document.getElementById('outputText');
+  function process(){
+    if(mode==='encode'){ outputText.value=inputText.value.toUpperCase().split('').map(ch=>{ if(ch===' ') return '/'; return MORSE[ch]||''; }).filter(x=>x!=='').join(' '); }
+    else{ outputText.value=inputText.value.split(' ').map(code=>{ if(code==='/') return ' '; return REVERSE_MORSE[code]||''; }).join(''); }
+  }
+  tabs.forEach(tab=>tab.addEventListener('click',()=>{ tabs.forEach(t=>t.classList.remove('active')); tab.classList.add('active'); mode=tab.dataset.mode; process(); }));
+  inputText.addEventListener('input',process);
+  document.getElementById('copyBtn').addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(outputText.value); }catch(e){} });
+</script>
+</body>
+</html>

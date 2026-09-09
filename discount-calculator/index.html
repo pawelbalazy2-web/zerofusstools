@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discount Calculator — Find the Sale Price</title>
+<meta name="description" content="Free discount calculator. Find the sale price and how much you save on a percentage discount.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#2a1508; --surface:#38200e; --line:#4d2f16; --paper:#f5ebe0; --muted:#b39270; --accent:#f0883e; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:480px; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:28px; }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); margin-bottom:8px; }
+  input[type="number"]{ width:100%; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:14px; font-family:'IBM Plex Mono',monospace; font-size:17px; color:var(--paper); outline:none; }
+  .results{ margin-top:8px; }
+  .result-row{ display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px dashed var(--line); }
+  .result-row .label{ font-size:13.5px; color:var(--muted); }
+  .result-row .value{ font-family:'IBM Plex Mono',monospace; font-size:15px; }
+  .result-row.highlight .value{ font-size:26px; font-weight:700; color:var(--accent); }
+  footer{ margin-top:48px; color:#5c4327; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#5c4327; }
+  .content{ width:100%; max-width:480px; margin-top:56px; padding-top:44px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Sora',sans-serif; font-weight:700; font-size:20px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#e0c3a8; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+  .faq-item{ margin-bottom:16px; }
+  .faq-item h3{ font-weight:600; font-size:14.5px; margin:0 0 6px; }
+  .faq-item p{ margin:0; font-size:14px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / shopping</div>
+  <h1>Discount Calculator</h1>
+  <p class="sub">Find the sale price and see how much you're saving.</p>
+
+  <div class="card">
+    <div class="field"><label>ORIGINAL PRICE</label><input type="number" id="price" value="199"></div>
+    <div class="field"><label>DISCOUNT (%)</label><input type="number" id="discount" value="25"></div>
+    <div class="results">
+      <div class="result-row"><span class="label">You save</span><span class="value" id="saved">—</span></div>
+      <div class="result-row highlight"><span class="label">Sale price</span><span class="value" id="finalPrice">—</span></div>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>How it's calculated</h2>
+    <p>The discount amount is the original price multiplied by the discount percentage. Subtract that from the original price to get the sale price. For example, 25% off $200 saves you $50, bringing the price to $150.</p>
+    <div class="faq-item"><h3>Can I stack two discounts?</h3><p>This tool calculates one discount at a time. Stacked discounts don't simply add up (20% + 10% isn't 30%) — apply the second discount to the already-reduced price.</p></div>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const price=document.getElementById('price'), discount=document.getElementById('discount');
+  function calc(){
+    const p=parseFloat(price.value), d=parseFloat(discount.value);
+    if(!p||d===undefined||isNaN(d)) return;
+    const saved=p*(d/100), final=p-saved;
+    document.getElementById('saved').textContent='$'+saved.toLocaleString('en-US',{maximumFractionDigits:2});
+    document.getElementById('finalPrice').textContent='$'+final.toLocaleString('en-US',{maximumFractionDigits:2});
+  }
+  price.addEventListener('input',calc); discount.addEventListener('input',calc); calc();
+</script>
+</body>
+</html>

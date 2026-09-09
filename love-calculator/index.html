@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Calculator — Name Compatibility Test</title>
+<meta name="description" content="Enter two names and find your love compatibility percentage. Free, fun love calculator.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#2b0f1e; --surface:#3a1729; --line:#552038; --paper:#fbeaf1; --muted:#c98ba6; --pink:#ff4d7d; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--pink); margin-bottom:14px; }
+  h1{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:560px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:420px; font-size:15px; margin:0 0 32px; }
+  .card{ width:100%; max-width:480px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:28px; }
+  .field-row{ display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+  .field{ flex:1; }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:6px; }
+  input[type="text"]{ width:100%; background:var(--ink); border:1px solid var(--line); border-radius:8px; padding:13px 14px; font-size:15px; color:var(--paper); outline:none; }
+  .heart-icon{ font-size:22px; margin-top:16px; }
+  .calc-btn{ width:100%; background:var(--pink); color:#fff; border:none; font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; padding:14px; border-radius:24px; cursor:pointer; }
+  .result-box{ margin-top:22px; text-align:center; display:none; }
+  .result-box.visible{ display:block; }
+  .result-percent{ font-family:'Fredoka',sans-serif; font-weight:700; font-size:48px; color:var(--pink); }
+  .result-bar{ height:10px; background:var(--ink); border-radius:6px; overflow:hidden; margin:12px 0; }
+  .result-bar-fill{ height:100%; background:linear-gradient(90deg,var(--pink),#ff8fb3); }
+  .result-msg{ font-size:14.5px; color:var(--muted); margin-top:10px; line-height:1.6; }
+  footer{ margin-top:48px; color:#6e2f4a; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#6e2f4a; }
+  .content{ width:100%; max-width:520px; margin-top:56px; padding-top:40px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:20px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#e0bccd; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+  .disclaimer{ margin-top:16px; font-size:12px; color:var(--muted); text-align:center; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">fun / love</div>
+  <h1>Love Calculator</h1>
+  <p class="sub">Enter two names and check the compatibility percentage.</p>
+
+  <div class="card">
+    <div class="field-row">
+      <div class="field"><label>YOUR NAME</label><input type="text" id="name1" value="Alex"></div>
+      <div class="heart-icon">💕</div>
+      <div class="field"><label>THEIR NAME</label><input type="text" id="name2" value="Jordan"></div>
+    </div>
+    <button class="calc-btn" id="calcBtn">Check compatibility</button>
+    <div class="result-box" id="resultBox">
+      <div class="result-percent" id="resultPercent">—</div>
+      <div class="result-bar"><div class="result-bar-fill" id="resultBar"></div></div>
+      <div class="result-msg" id="resultMsg"></div>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>How the score is calculated</h2>
+    <p>The compatibility percentage is calculated from the letters in both names — a playful algorithm, not a scientific method. The same pair of names always produces the same result, so you can try different combinations and compare.</p>
+    <p class="disclaimer">This tool is for entertainment only and has no predictive value for real relationships.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  function stringToSeed(str){ let hash=0; for(let i=0;i<str.length;i++){ hash=(hash<<5)-hash+str.charCodeAt(i); hash|=0; } return Math.abs(hash); }
+  function seededRandom(seed){ let x=Math.sin(seed)*10000; return x-Math.floor(x); }
+  const MESSAGES=[[0,30,"Maybe better as friends — but who knows, opposites sometimes attract."],[30,50,"There's potential here, but it takes work and good communication."],[50,70,"Not bad! There's chemistry, though every relationship takes effort."],[70,90,"Great match! The name-stars point to a good relationship."],[90,101,"This could be it! A rare, high compatibility score."]];
+  document.getElementById('calcBtn').addEventListener('click',()=>{
+    const n1=document.getElementById('name1').value.trim().toLowerCase(), n2=document.getElementById('name2').value.trim().toLowerCase();
+    if(!n1||!n2) return;
+    const combined=[n1,n2].sort().join('+'); const seed=stringToSeed(combined);
+    const percent=Math.floor(seededRandom(seed)*66)+34;
+    document.getElementById('resultPercent').textContent=percent+'%';
+    document.getElementById('resultBar').style.width=percent+'%';
+    const msg=MESSAGES.find(([min,max])=>percent>=min&&percent<max);
+    document.getElementById('resultMsg').textContent=msg[2];
+    document.getElementById('resultBox').classList.add('visible');
+  });
+</script>
+</body>
+</html>

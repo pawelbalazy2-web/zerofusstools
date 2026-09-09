@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac Compatibility Calculator — Free Online</title>
+<meta name="description" content="Check the compatibility between two zodiac signs. Pick your sign and your partner's sign to see the result.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#1b1030; --surface:#251740; --line:#392a5c; --paper:#ede8fa; --muted:#9c8fc4; --accent:#8ec5fc; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:560px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:420px; font-size:15px; margin:0 0 32px; }
+  .selectors{ display:flex; align-items:center; gap:16px; margin-bottom:24px; }
+  select{ background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:12px 14px; font-size:14px; color:var(--paper); cursor:pointer; outline:none; }
+  .heart{ font-size:20px; }
+  .result-card{ width:100%; max-width:520px; background:var(--surface); border:1px solid var(--accent); border-radius:12px; padding:26px; display:none; text-align:center; }
+  .result-card.visible{ display:block; }
+  .result-percent{ font-family:'Cormorant Garamond',serif; font-weight:700; font-size:42px; color:var(--accent); }
+  .result-text{ font-size:14.5px; line-height:1.7; color:#d8d2ef; margin-top:12px; text-align:left; }
+  footer{ margin-top:48px; color:#453c6e; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#453c6e; }
+  .content{ width:100%; max-width:520px; margin-top:56px; padding-top:40px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:22px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#c3bce0; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">horoscope / compatibility</div>
+  <h1>Zodiac Compatibility</h1>
+  <p class="sub">Pick two signs to check their compatibility.</p>
+
+  <div class="selectors"><select id="sign1"></select><span class="heart">💫</span><select id="sign2"></select></div>
+  <div class="result-card" id="resultCard"><div class="result-percent" id="resultPercent"></div><div class="result-text" id="resultText"></div></div>
+
+  <section class="content">
+    <h2>How compatibility is determined</h2>
+    <p>Astrology groups zodiac signs into four elements: fire (Aries, Leo, Sagittarius), earth (Taurus, Virgo, Capricorn), air (Gemini, Libra, Aquarius), and water (Cancer, Scorpio, Pisces). Signs sharing an element, or elements considered complementary (fire-air, earth-water), are traditionally seen as more compatible.</p>
+    <p>The percentage is a fun addition — the same pair of signs always produces the same score.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const SIGNS=[{id:'aries',name:'Aries ♈',element:'fire'},{id:'taurus',name:'Taurus ♉',element:'earth'},{id:'gemini',name:'Gemini ♊',element:'air'},{id:'cancer',name:'Cancer ♋',element:'water'},{id:'leo',name:'Leo ♌',element:'fire'},{id:'virgo',name:'Virgo ♍',element:'earth'},{id:'libra',name:'Libra ♎',element:'air'},{id:'scorpio',name:'Scorpio ♏',element:'water'},{id:'sagittarius',name:'Sagittarius ♐',element:'fire'},{id:'capricorn',name:'Capricorn ♑',element:'earth'},{id:'aquarius',name:'Aquarius ♒',element:'air'},{id:'pisces',name:'Pisces ♓',element:'water'}];
+  const ELEMENT_TEXTS={
+    'fire-fire':"Two fire signs together bring passion and energy — but also potential rivalry for the spotlight. Once you learn to share the stage, this is a mutually inspiring duo.",
+    'earth-earth':"Steady meets steady — this pair values stability, loyalty, and building something lasting together. Spontaneity may be lacking, but the foundation is solid.",
+    'air-air':"Two minds full of ideas — great communication and intellectual connection. Grounding emotions in concrete action, not just conversation, helps this pairing thrive.",
+    'water-water':"Deep emotional connection and intuitive understanding without needing words. Watch out for both sinking into moods together — sometimes you need someone to pull you back up.",
+    'fire-earth':"Fire brings energy, earth brings stability — this can work well if both sides appreciate the differences instead of trying to change each other.",
+    'fire-air':"A classically compatible combination — air fuels fire, and fire warms air. A dynamic, exciting relationship full of shared ideas and action.",
+    'fire-water':"Opposite elements — fire and water can extinguish or steam each other, but also complement, if both learn to respect different paces and needs.",
+    'earth-air':"Earth seeks the concrete, air seeks possibility. This pairing takes patience but can offer an interesting balance between practicality and vision.",
+    'earth-water':"A naturally compatible combination — earth gives water stable banks, and water teaches earth flexibility and emotional depth.",
+    'air-water':"Air rationalizes, water feels — this pairing teaches balance between head and heart, though it can lead to communication mismatches around emotion."
+  };
+  function stringToSeed(str){ let hash=0; for(let i=0;i<str.length;i++){ hash=(hash<<5)-hash+str.charCodeAt(i); hash|=0; } return Math.abs(hash); }
+  function seededRandom(seed){ let x=Math.sin(seed)*10000; return x-Math.floor(x); }
+  const sign1Select=document.getElementById('sign1'), sign2Select=document.getElementById('sign2');
+  SIGNS.forEach(s=>{ sign1Select.innerHTML+=`<option value="${s.id}">${s.name}</option>`; sign2Select.innerHTML+=`<option value="${s.id}">${s.name}</option>`; });
+  sign2Select.selectedIndex=3;
+  function updateResult(){
+    const s1=SIGNS.find(s=>s.id===sign1Select.value), s2=SIGNS.find(s=>s.id===sign2Select.value);
+    const key=[s1.element,s2.element].sort().join('-');
+    const text=ELEMENT_TEXTS[key]||ELEMENT_TEXTS[[s2.element,s1.element].sort().join('-')];
+    const seed=stringToSeed([s1.id,s2.id].sort().join('+')); const percent=Math.floor(seededRandom(seed)*41)+55;
+    document.getElementById('resultPercent').textContent=percent+'%'; document.getElementById('resultText').textContent=text;
+    document.getElementById('resultCard').classList.add('visible');
+  }
+  sign1Select.addEventListener('change',updateResult); sign2Select.addEventListener('change',updateResult); updateResult();
+</script>
+</body>
+</html>

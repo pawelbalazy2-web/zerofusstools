@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Calculator — Monthly Payment Estimator</title>
+<meta name="description" content="Free loan calculator. Estimate your monthly payment based on loan amount, interest rate, and term.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#101a33; --surface:#172242; --line:#243258; --paper:#e9edf7; --muted:#7b88b3; --accent:#3b5fe0; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 40px; }
+  .card{ width:100%; max-width:540px; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:28px; }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); margin-bottom:8px; }
+  input[type="number"]{ width:100%; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:13px 14px; font-family:'IBM Plex Mono',monospace; font-size:16px; color:var(--paper); outline:none; }
+  .results{ margin-top:8px; }
+  .result-row{ display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px dashed var(--line); }
+  .result-row .label{ font-size:13.5px; color:var(--muted); }
+  .result-row .value{ font-family:'IBM Plex Mono',monospace; font-size:15px; }
+  .result-row.highlight .value{ font-size:26px; font-weight:700; color:var(--accent); }
+  .disclaimer{ margin-top:20px; font-size:12px; color:var(--muted); text-align:center; }
+  footer{ margin-top:48px; color:#3d4a70; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#3d4a70; }
+  .content{ width:100%; max-width:600px; margin-top:64px; padding-top:48px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Sora',sans-serif; font-weight:700; font-size:22px; margin:40px 0 14px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#b9c2de; font-size:15px; line-height:1.75; margin:0 0 14px; }
+  .faq-item{ margin-bottom:20px; }
+  .faq-item h3{ font-weight:600; font-size:15px; margin:0 0 8px; }
+  .faq-item p{ margin:0; font-size:14.5px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / finance</div>
+  <h1>Loan Calculator</h1>
+  <p class="sub">Estimate your monthly payment based on amount, rate, and term.</p>
+
+  <div class="card">
+    <div class="field"><label>LOAN AMOUNT</label><input type="number" id="amount" value="20000"></div>
+    <div class="field"><label>ANNUAL INTEREST RATE (%)</label><input type="number" id="rate" value="6.5" step="0.1"></div>
+    <div class="field"><label>TERM (YEARS)</label><input type="number" id="years" value="5"></div>
+    <div class="results">
+      <div class="result-row highlight"><span class="label">Monthly payment</span><span class="value" id="monthlyResult">—</span></div>
+      <div class="result-row"><span class="label">Total interest</span><span class="value" id="interestResult">—</span></div>
+      <div class="result-row"><span class="label">Total repaid</span><span class="value" id="totalResult">—</span></div>
+    </div>
+    <p class="disclaimer">Assumes equal monthly payments and a fixed rate. Actual bank offers may include additional fees.</p>
+  </div>
+
+  <section class="content">
+    <h2>How the monthly payment is calculated</h2>
+    <p>With an equal-payment loan, you pay the same amount every month for the full term, though the split between principal and interest shifts over time — early payments are mostly interest, later ones mostly principal. This is the standard structure for most personal and auto loans.</p>
+    <h2>What affects your payment</h2>
+    <p>Three factors matter most: the loan amount (higher amount, higher payment), the interest rate (even a small difference compounds significantly over a long term), and the loan term (a longer term lowers the monthly payment but increases total interest paid).</p>
+    <div class="faq-item"><h3>Is this an official bank quote?</h3><p>No — this is an independent estimate. Your actual offer depends on your credit profile, lender margin, and fees not included here.</p></div>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const amount=document.getElementById('amount'), rate=document.getElementById('rate'), years=document.getElementById('years');
+  function formatUSD(v){ return '$'+v.toLocaleString('en-US',{maximumFractionDigits:0}); }
+  function calc(){
+    const P=parseFloat(amount.value), annualRate=parseFloat(rate.value), n=parseFloat(years.value)*12;
+    if(!P||!annualRate||!n){ return; }
+    const r=(annualRate/100)/12;
+    const monthly=P*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
+    const total=monthly*n, interest=total-P;
+    document.getElementById('monthlyResult').textContent=formatUSD(monthly);
+    document.getElementById('interestResult').textContent=formatUSD(interest);
+    document.getElementById('totalResult').textContent=formatUSD(total);
+  }
+  [amount,rate,years].forEach(el=>el.addEventListener('input',calc));
+  calc();
+</script>
+</body>
+</html>

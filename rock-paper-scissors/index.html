@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rock Paper Scissors — Play Online Free</title>
+<meta name="description" content="Play rock paper scissors against the computer online. Free, track your score.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#1a1633; --surface:#241f42; --line:#372f5e; --paper:#f2eefc; --muted:#a99fd4; --pink:#ff3f8e; --teal:#35d0ba; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:56px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--pink); margin-bottom:14px; }
+  h1{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:420px; font-size:15px; margin:0 0 32px; }
+  .score{ display:flex; gap:30px; font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--muted); margin-bottom:26px; }
+  .score b{ color:var(--paper); font-size:20px; display:block; }
+  .arena{ display:flex; align-items:center; gap:24px; font-size:64px; margin-bottom:24px; min-height:90px; }
+  .vs{ font-family:'Fredoka',sans-serif; font-size:18px; color:var(--muted); }
+  .choices{ display:flex; gap:14px; }
+  .choice-btn{ width:70px; height:70px; background:var(--surface); border:1px solid var(--line); border-radius:12px; font-size:32px; cursor:pointer; }
+  .choice-btn:hover{ border-color:var(--pink); }
+  .result-msg{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:20px; margin-top:22px; min-height:28px; }
+  footer{ margin-top:56px; color:#4d4478; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#4d4478; }
+  .content{ width:100%; max-width:520px; margin-top:56px; padding-top:40px; border-top:1px solid var(--line); text-align:center; }
+  .content h2{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:19px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#c9c3e3; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">game / classic</div>
+  <h1>Rock, Paper, Scissors</h1>
+  <p class="sub">Play against the computer.</p>
+  <div class="score"><div>YOU<b id="playerScore">0</b></div><div>COMPUTER<b id="computerScore">0</b></div></div>
+  <div class="arena"><div id="playerChoice">❔</div><div class="vs">vs</div><div id="computerChoice">❔</div></div>
+  <div class="choices">
+    <button class="choice-btn" data-choice="rock">🪨</button>
+    <button class="choice-btn" data-choice="paper">📄</button>
+    <button class="choice-btn" data-choice="scissors">✂️</button>
+  </div>
+  <div class="result-msg" id="resultMsg"></div>
+
+  <section class="content">
+    <h2>Rules</h2>
+    <p>Rock beats scissors, scissors cut paper, paper covers rock. You and the computer choose simultaneously — whichever choice beats the other wins the round. Matching choices is a tie.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const ICONS={rock:'🪨',paper:'📄',scissors:'✂️'}, BEATS={rock:'scissors',paper:'rock',scissors:'paper'};
+  let playerScore=0, computerScore=0;
+  document.querySelectorAll('.choice-btn').forEach(btn=>btn.addEventListener('click',()=>play(btn.dataset.choice)));
+  function play(playerChoice){
+    const options=['rock','paper','scissors']; const computerChoice=options[Math.floor(Math.random()*3)];
+    document.getElementById('playerChoice').textContent=ICONS[playerChoice]; document.getElementById('computerChoice').textContent=ICONS[computerChoice];
+    let msg;
+    if(playerChoice===computerChoice){ msg='Tie!'; }
+    else if(BEATS[playerChoice]===computerChoice){ msg='You win! 🎉'; playerScore++; }
+    else{ msg='Computer wins.'; computerScore++; }
+    document.getElementById('resultMsg').textContent=msg;
+    document.getElementById('playerScore').textContent=playerScore; document.getElementById('computerScore').textContent=computerScore;
+  }
+</script>
+</body>
+</html>

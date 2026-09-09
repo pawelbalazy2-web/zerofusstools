@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trivia Quiz — Free General Knowledge Quiz Online</title>
+<meta name="description" content="Test your general knowledge with this free 10-question trivia quiz. No signup required.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#1a1633; --surface:#241f42; --line:#372f5e; --paper:#f2eefc; --muted:#a99fd4; --pink:#ff3f8e; --teal:#35d0ba; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:56px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--pink); margin-bottom:14px; }
+  h1{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:clamp(30px,4.8vw,44px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:420px; font-size:15px; margin:0 0 32px; }
+  .card{ width:100%; max-width:520px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:28px; }
+  .progress{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted); margin-bottom:14px; }
+  .question{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:19px; margin-bottom:20px; }
+  .option{ display:block; width:100%; text-align:left; background:var(--ink); border:1px solid var(--line); border-radius:8px; padding:13px 16px; margin-bottom:10px; color:var(--paper); font-size:14.5px; cursor:pointer; }
+  .option:hover{ border-color:var(--pink); }
+  .option.correct{ background:var(--teal); color:var(--ink); border-color:var(--teal); }
+  .option.wrong{ background:var(--pink); border-color:var(--pink); }
+  .next-btn{ margin-top:14px; width:100%; background:var(--pink); color:#fff; border:none; font-family:'Fredoka',sans-serif; font-weight:600; font-size:14.5px; padding:13px; border-radius:8px; cursor:pointer; display:none; }
+  .final-score{ text-align:center; font-family:'Fredoka',sans-serif; font-weight:700; font-size:24px; color:var(--teal); }
+  footer{ margin-top:56px; color:#4d4478; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#4d4478; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">game / quiz</div>
+  <h1>Trivia Quiz</h1>
+  <p class="sub">10 questions across different topics. How many can you get right?</p>
+  <div class="card" id="quizCard"></div>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const QUESTIONS=[
+    {q:"What is the capital of Australia?",options:["Sydney","Canberra","Melbourne","Perth"],correct:1},
+    {q:"How many legs does a spider have?",options:["6","8","10","4"],correct:1},
+    {q:"Who painted the Mona Lisa?",options:["Michelangelo","Raphael","Leonardo da Vinci","Rembrandt"],correct:2},
+    {q:"What is the longest river in the world?",options:["Amazon","Nile","Yangtze","Mississippi"],correct:1},
+    {q:"How many planets are in our solar system?",options:["7","8","9","10"],correct:1},
+    {q:"In what year did World War II end?",options:["1943","1944","1945","1946"],correct:2},
+    {q:"What is the chemical symbol for gold?",options:["Ag","Au","Gd","Go"],correct:1},
+    {q:"Which organ is the largest in the human body?",options:["Liver","Brain","Skin","Lungs"],correct:2},
+    {q:"Who wrote 'Romeo and Juliet'?",options:["Charles Dickens","William Shakespeare","Jane Austen","Mark Twain"],correct:1},
+    {q:"What is the tallest mountain in the world?",options:["K2","Mont Blanc","Mount Everest","Kilimanjaro"],correct:2}
+  ];
+  let current=0, score=0, answered=false;
+  function render(){
+    const card=document.getElementById('quizCard');
+    if(current>=QUESTIONS.length){
+      card.innerHTML=`<div class="final-score">Your score: ${score} / ${QUESTIONS.length} 🎉</div><button class="next-btn" style="display:block;" id="restartBtn">Play again</button>`;
+      document.getElementById('restartBtn').addEventListener('click',()=>{ current=0; score=0; render(); });
+      return;
+    }
+    const q=QUESTIONS[current]; answered=false;
+    card.innerHTML=`<div class="progress">Question ${current+1} of ${QUESTIONS.length} &nbsp;·&nbsp; Score: ${score}</div><div class="question">${q.q}</div><div id="options"></div><button class="next-btn" id="nextBtn">Next</button>`;
+    const optionsDiv=document.getElementById('options');
+    q.options.forEach((opt,i)=>{ const btn=document.createElement('button'); btn.className='option'; btn.textContent=opt; btn.addEventListener('click',()=>selectAnswer(i,btn)); optionsDiv.appendChild(btn); });
+  }
+  function selectAnswer(i,btn){
+    if(answered) return; answered=true;
+    const q=QUESTIONS[current]; const allOptions=document.querySelectorAll('.option');
+    if(i===q.correct){ btn.classList.add('correct'); score++; } else { btn.classList.add('wrong'); allOptions[q.correct].classList.add('correct'); }
+    document.getElementById('nextBtn').style.display='block';
+    document.getElementById('nextBtn').addEventListener('click',()=>{ current++; render(); },{once:true});
+  }
+  render();
+</script>
+</body>
+</html>

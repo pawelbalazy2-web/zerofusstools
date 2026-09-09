@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Path Number Calculator — Numerology Online</title>
+<meta name="description" content="Calculate your numerology life path number from your date of birth and discover its meaning. Free, no signup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#161329; --surface:#201c38; --line:#362f57; --paper:#ece8f7; --muted:#9089b8; --gold:#d4a574; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--gold); margin-bottom:14px; }
+  h1{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(34px,5.5vw,50px); text-align:center; max-width:600px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:460px; font-size:15px; margin:0 0 32px; font-style:italic; }
+  .card{ width:100%; max-width:420px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:28px; text-align:center; }
+  input[type="date"]{ width:100%; background:var(--ink); border:1px solid var(--line); border-radius:8px; padding:14px; font-family:'IBM Plex Mono',monospace; font-size:16px; color:var(--paper); outline:none; color-scheme:dark; margin-bottom:20px; }
+  .result-number{ font-family:'Cormorant Garamond',serif; font-weight:700; font-size:64px; color:var(--gold); line-height:1; }
+  .result-title{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:20px; margin:8px 0 14px; }
+  .result-text{ font-size:14px; line-height:1.7; color:#d3cdea; text-align:left; }
+  footer{ margin-top:48px; color:#4a4270; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#4a4270; }
+  .content{ width:100%; max-width:520px; margin-top:56px; padding-top:40px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:22px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#c3bce0; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+  .disclaimer{ margin-top:16px; font-size:12px; color:var(--muted); text-align:center; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">reading / numerology</div>
+  <h1>Life Path Number</h1>
+  <p class="sub">Enter your birth date to find your numerology number.</p>
+
+  <div class="card">
+    <input type="date" id="birthDate">
+    <div id="resultArea"></div>
+  </div>
+
+  <section class="content">
+    <h2>What the life path number is</h2>
+    <p>The life path number is a core concept in numerology — calculated by summing all the digits of your birth date down to a single digit (except for the "master numbers" 11, 22, and 33, which stay unreduced). It's believed to reflect core personality traits and life direction.</p>
+    <p class="disclaimer">Numerology is symbolic and for entertainment — it's not a scientifically validated method of predicting personality or the future.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  const MEANINGS={
+    1:{title:"The Leader",text:"You're a natural leader — independent, ambitious, and driven. You value self-reliance and thrive when you set your own direction. Your challenge is learning patience with others' pace."},
+    2:{title:"The Diplomat",text:"You have a gift for building relationships and easing conflict. Sensitive to others' needs, you value harmony. Remember to care for your own needs too, not just everyone else's."},
+    3:{title:"The Creator",text:"Expression, creativity, and optimism are your strengths. You communicate easily and draw others in with your energy. Discipline can be a growth area."},
+    4:{title:"The Builder",text:"You value stability, order, and solid work. People can rely on you. Flexibility with unexpected change is your growth edge."},
+    5:{title:"The Free Spirit",text:"Freedom, adventure, and variety drive you most. Routine bores you easily. Watch for scattering your energy across too many directions at once."},
+    6:{title:"The Caregiver",text:"Responsibility, care for others, and a sense of fairness define you. You naturally take on a caretaking role. Don't forget your own boundaries."},
+    7:{title:"The Seeker",text:"An analytical mind, depth, and a need to understand meaning. You value solitude for reflection over social noise. Opening up more to others can help."},
+    8:{title:"The Achiever",text:"Ambition, determination, and skill managing resources — material and human. You naturally drive toward success. Remember worth isn't only measured by achievement."},
+    9:{title:"The Humanitarian",text:"Empathy, a broad perspective, and concern for the common good define you. Compassion comes easily. Caring for yourself as much as you care for others is a challenge."},
+    11:{title:"Master Number — Intuitive Visionary",text:"As a master number, 11 carries heightened intuition and spiritual sensitivity. You have the potential to inspire others with your vision, though that same sensitivity can feel overwhelming."},
+    22:{title:"Master Number — Master Builder",text:"22 combines the practicality of 4 with the visionary energy of master numbers — you have the potential to realize large, lasting projects that impact others broadly."},
+    33:{title:"Master Number — The Teacher",text:"The rare master number 33 symbolizes deep care for others combined with a drive to teach and heal — the energy of selfless service on a large scale."}
+  };
+  function reduceToDigit(num){ while(num>9 && num!==11 && num!==22 && num!==33){ num=String(num).split('').reduce((sum,d)=>sum+parseInt(d,10),0); } return num; }
+  document.getElementById('birthDate').addEventListener('input',(e)=>{
+    const val=e.target.value; if(!val) return;
+    const digits=val.replace(/-/g,'').split('').map(Number);
+    const sum=digits.reduce((a,b)=>a+b,0); const lifeNumber=reduceToDigit(sum); const meaning=MEANINGS[lifeNumber];
+    document.getElementById('resultArea').innerHTML=`<div class="result-number">${lifeNumber}</div><div class="result-title">${meaning.title}</div><div class="result-text">${meaning.text}</div>`;
+  });
+</script>
+</body>
+</html>

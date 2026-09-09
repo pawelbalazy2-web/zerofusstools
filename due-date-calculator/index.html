@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pregnancy Due Date Calculator — Free Online</title>
+<meta name="description" content="Estimate your pregnancy due date based on the first day of your last period. Free calculator, no signup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9406337676828505" crossorigin="anonymous"></script>
+<style>
+  :root{ --ink:#2b1420; --surface:#3a1b2a; --line:#54263c; --paper:#f7e9ef; --muted:#c090aa; --accent:#db2777; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--paper); font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:64px 20px 40px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--accent); margin-bottom:14px; }
+  h1{ font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(28px,4.8vw,40px); text-align:center; max-width:560px; margin:0 0 12px; }
+  .sub{ color:var(--muted); text-align:center; max-width:440px; font-size:15px; margin:0 0 32px; }
+  .card{ width:100%; max-width:460px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:28px; }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); margin-bottom:8px; }
+  input[type="date"]{ width:100%; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:14px; font-family:'IBM Plex Mono',monospace; font-size:16px; color:var(--paper); outline:none; color-scheme:dark; }
+  .result-box{ margin-top:8px; background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:22px; text-align:center; }
+  .result-value{ font-family:'Sora',sans-serif; font-weight:800; font-size:26px; color:var(--accent); }
+  .result-sub{ font-size:13px; color:var(--muted); margin-top:6px; }
+  .week-badge{ display:inline-block; margin-top:14px; background:var(--accent); color:#fff; padding:6px 16px; border-radius:16px; font-family:'IBM Plex Mono',monospace; font-size:13px; }
+  .disclaimer{ margin-top:20px; font-size:12px; color:var(--muted); text-align:center; line-height:1.6; }
+  footer{ margin-top:48px; color:#6e2f4a; font-size:12px; font-family:'IBM Plex Mono',monospace; text-align:center; }
+  footer a{ color:#6e2f4a; }
+  .content{ width:100%; max-width:520px; margin-top:56px; padding-top:40px; border-top:1px solid var(--line); }
+  .content h2{ font-family:'Sora',sans-serif; font-weight:700; font-size:20px; margin:28px 0 12px; }
+  .content h2:first-child{ margin-top:0; }
+  .content p{ color:#e0bccd; font-size:14.5px; line-height:1.7; margin:0 0 12px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">tool / parenting</div>
+  <h1>Pregnancy Due Date Calculator</h1>
+  <p class="sub">Estimate your due date based on your last period.</p>
+
+  <div class="card">
+    <div class="field"><label>FIRST DAY OF LAST PERIOD</label><input type="date" id="lastPeriod"></div>
+    <div class="result-box" id="resultBox" style="display:none;">
+      <div class="result-value" id="dueDate">—</div>
+      <div class="result-sub">estimated due date</div>
+      <div class="week-badge" id="weekBadge"></div>
+    </div>
+    <p class="disclaimer">This is an estimate based on Naegele's rule (280 days from your last period), assuming a regular 28-day cycle. Actual due dates can vary — your doctor will confirm based on ultrasound.</p>
+  </div>
+
+  <section class="content">
+    <h2>How the due date is calculated</h2>
+    <p>Naegele's rule assumes pregnancy lasts about 280 days (40 weeks) from the first day of your last period, based on a regular 28-day cycle. It's the standard method for an initial due date estimate, though only a small percentage of babies arrive on the exact calculated day — the actual date usually falls within a two-week window either side.</p>
+  </section>
+
+  <footer>Zero Fuss Tools &nbsp;·&nbsp; <a href="/privacy-policy.html">privacy policy</a> &nbsp;·&nbsp; <a href="/terms.html">terms</a></footer>
+
+<script>
+  document.getElementById('lastPeriod').addEventListener('input',(e)=>{
+    const val=e.target.value; if(!val) return;
+    const start=new Date(val); const dueDate=new Date(start); dueDate.setDate(dueDate.getDate()+280);
+    const today=new Date(); const daysPassed=Math.floor((today-start)/86400000); const weeksPassed=Math.floor(daysPassed/7); const daysRemainder=daysPassed%7;
+    document.getElementById('dueDate').textContent=dueDate.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
+    let weekText = (weeksPassed>=0 && weeksPassed<=42) ? `currently ~week ${weeksPassed} + ${daysRemainder} days` : 'date outside typical pregnancy range';
+    document.getElementById('weekBadge').textContent=weekText;
+    document.getElementById('resultBox').style.display='block';
+  });
+</script>
+</body>
+</html>
